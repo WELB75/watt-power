@@ -5,7 +5,7 @@ import { useMemo, useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
-function RoofPanels({ panelRef }: { panelRef: React.MutableRefObject<THREE.Group | null> }) {
+function RoofPanels({ panelRef }: { panelRef: MutableRefObject<THREE.Group | null> }) {
   const panels = useMemo(() => {
     const result: Array<[number, number]> = [];
     for (let row = 0; row < 2; row += 1) {
@@ -34,7 +34,7 @@ function RoofPanels({ panelRef }: { panelRef: React.MutableRefObject<THREE.Group
   );
 }
 
-function Inverter({ inverterRef }: { inverterRef: React.MutableRefObject<THREE.Group | null> }) {
+function Inverter({ inverterRef }: { inverterRef: MutableRefObject<THREE.Group | null> }) {
   return (
     <group ref={inverterRef} position={[-0.55, 0.62, 1.38]}>
       <mesh castShadow>
@@ -53,7 +53,7 @@ function Inverter({ inverterRef }: { inverterRef: React.MutableRefObject<THREE.G
   );
 }
 
-function Battery({ batteryRef }: { batteryRef: React.MutableRefObject<THREE.Group | null> }) {
+function Battery({ batteryRef }: { batteryRef: MutableRefObject<THREE.Group | null> }) {
   return (
     <group ref={batteryRef} position={[0.82, 0.35, 1.32]}>
       <mesh castShadow>
