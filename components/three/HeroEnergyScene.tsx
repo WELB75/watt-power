@@ -115,8 +115,8 @@ function HeroWorld() {
         position={[6.5, 8, 5]}
         intensity={4.8}
         color="#ffe7c2"
-        shadow-mapSize-width={2048}
-        shadow-mapSize-height={2048}
+        shadow-mapSize-width={1024}
+        shadow-mapSize-height={1024}
         shadow-camera-left={-8}
         shadow-camera-right={8}
         shadow-camera-top={8}
@@ -160,7 +160,7 @@ export function HeroEnergyScene() {
     <Canvas
       shadows
       camera={{ position: [7.1, 3.2, 8.7], fov: 37 }}
-      dpr={[1, 1.45]}
+      dpr={[1, 1.2]}
       gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }}
       onCreated={({ gl }) => {
         gl.toneMapping = THREE.ACESFilmicToneMapping;
