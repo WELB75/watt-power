@@ -10,20 +10,20 @@ const geist = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "Watt Power — Intelligent Energy",
+  title: "Watt Power — Énergie intelligente",
   description:
-    "Watt Power gives homes and businesses precise visibility and control over their energy.",
+    "Watt Power donne aux particuliers et aux entreprises une vision précise et un contrôle clair de leur énergie.",
   openGraph: {
-    title: "Watt Power — Intelligent Energy",
+    title: "Watt Power — Énergie intelligente",
     description:
-      "Solar power, storage and monitoring designed as one intelligent system.",
+      "Production solaire, stockage et suivi réunis dans un seul système énergétique intelligent.",
     type: "website",
   },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={geist.variable}>
+    <html lang="fr" className={geist.variable}>
       <body>
         <SmoothScroll>{children}</SmoothScroll>
       </body>
