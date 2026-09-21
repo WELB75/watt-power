@@ -57,7 +57,11 @@ export function SceneGate({
   const [webglReady, setWebglReady] = useState<boolean | null>(null);
 
   useEffect(() => {
-    setWebglReady(canUseWebGL());
+    const frame = window.requestAnimationFrame(() => {
+      setWebglReady(canUseWebGL());
+    });
+
+    return () => window.cancelAnimationFrame(frame);
   }, []);
 
   useEffect(() => {
