@@ -1,4 +1,4 @@
-const items = ["SUN", "PANELS", "INVERTER", "BATTERY", "HOME"];
+const items = ["SOLEIL", "PANNEAUX", "ONDULEUR", "BATTERIE", "MAISON"];
 
 export function EnergyFlow() {
   return (
