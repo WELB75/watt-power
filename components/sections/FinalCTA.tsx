@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export function FinalCTA() {
   return (
     <section id="contact" className="relative min-h-[100svh] border-t border-white/8">
@@ -21,7 +23,7 @@ export function FinalCTA() {
         <footer className="flex flex-col gap-4 border-t border-white/10 pt-5 text-[10px] uppercase tracking-[.13em] text-white/26 md:flex-row md:items-center md:justify-between">
           <span>© 2026 Watt Power</span>
           <div className="flex flex-wrap gap-5">
-            <a href="/credits" className="transition hover:text-white/70">Crédits 3D & visuels</a>
+            <Link href="/credits" className="transition hover:text-white/70">Crédits 3D & visuels</Link>
             <span>Prototype — contenus définitifs à intégrer avant lancement.</span>
           </div>
         </footer>
