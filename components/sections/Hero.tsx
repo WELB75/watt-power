@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { HeroEnergyScene } from "@/components/three/HeroEnergyScene";
+import { SceneGate } from "@/components/three/SceneGate";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -48,7 +49,7 @@ export function Hero() {
   return (
     <section id="top" ref={root} className="relative min-h-[100svh] overflow-hidden bg-[#060806] pt-18">
       <div data-hero-scene className="absolute inset-0 lg:left-[24%]">
-        <HeroEnergyScene />
+        <SceneGate rootMargin="20% 0px"><HeroEnergyScene /></SceneGate>
       </div>
 
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,#060806_0%,rgba(6,8,6,.96)_20%,rgba(6,8,6,.68)_41%,rgba(6,8,6,.12)_69%,rgba(6,8,6,.3)_100%)]" />
