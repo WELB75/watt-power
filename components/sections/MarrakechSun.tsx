@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { AnimatedHeading } from "@/components/motion/AnimatedHeading";
 import { MarrakechScene } from "@/components/three/MarrakechScene";
+import { SceneGate } from "@/components/three/SceneGate";
 import { REAL_ASSETS } from "@/components/three/realAssets";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -52,7 +53,7 @@ export function MarrakechSun() {
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(16,13,10,.08),rgba(8,10,11,.38))]" />
 
       <div className="absolute inset-0 lg:left-[24%]">
-        <MarrakechScene progress={progress} />
+        <SceneGate rootMargin="35% 0px"><MarrakechScene progress={progress} /></SceneGate>
       </div>
 
       <div
