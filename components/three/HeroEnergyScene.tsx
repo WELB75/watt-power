@@ -1,5 +1,6 @@
 "use client";
 
+import type { MutableRefObject } from "react";
 import { useEffect, useMemo, useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
@@ -120,11 +121,11 @@ function Villa() {
   );
 }
 
-function EnergyPulse({ curve }: { curve: THREE.CatmullRomCurve3 }) {
+function EnergyPulse({ curve, reducedMotion }: { curve: THREE.CatmullRomCurve3; reducedMotion: MutableRefObject<boolean> }) {
   const pulse = useRef<THREE.Group>(null);
 
   useFrame(({ clock }) => {
-    if (!pulse.current) return;
+    if (!pulse.current || reducedMotion.current) return;
     const t = (clock.elapsedTime * 0.09) % 1;
     pulse.current.position.copy(curve.getPointAt(t));
   });
@@ -223,7 +224,7 @@ function HeroWorld() {
         <tubeGeometry args={[energyCurve, 100, 0.07, 10, false]} />
         <meshBasicMaterial color="#d9ff5a" transparent opacity={0.055} />
       </mesh>
-      {!reducedMotion.current && <EnergyPulse curve={energyCurve} />}
+      <EnergyPulse curve={energyCurve} reducedMotion={reducedMotion} />
 
       <mesh receiveShadow position={[0, -1.15, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <planeGeometry args={[24, 18]} />
