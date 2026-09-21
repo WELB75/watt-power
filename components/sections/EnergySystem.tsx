@@ -3,62 +3,99 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { EnergyFlow } from "@/components/ui/EnergyFlow";
+import { EnergySystemScene } from "@/components/three/EnergySystemScene";
 
 gsap.registerPlugin(ScrollTrigger);
+
+const stages = ["Soleil", "Panneaux", "Onduleur", "Batterie", "Maison"];
 
 export function EnergySystem() {
   const root = useRef<HTMLElement>(null);
   const scene = useRef<HTMLDivElement>(null);
+  const progress = useRef(0);
 
   useEffect(() => {
     const el = root.current;
     const sc = scene.current;
     if (!el || !sc) return;
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
     const ctx = gsap.context(() => {
-      if (reduced) {
-        gsap.set("[data-energy-node]", { opacity: 1 });
-        gsap.set("[data-energy-line]", { width: "84%" });
-        return;
-      }
-      const nodes = gsap.utils.toArray<HTMLElement>("[data-energy-node]");
-      const tl = gsap.timeline({
+      const trigger = ScrollTrigger.create({
+        trigger: el,
+        start: "top top",
+        end: "+=320%",
+        pin: sc,
+        scrub: 1,
+        anticipatePin: 1,
+        onUpdate: (self) => {
+          progress.current = self.progress;
+        },
+      });
+
+      gsap.to("[data-system-intro]", {
+        opacity: 0.18,
+        y: -24,
+        ease: "none",
         scrollTrigger: {
           trigger: el,
           start: "top top",
-          end: "+=280%",
-          pin: sc,
-          scrub: 1,
-          anticipatePin: 1,
+          end: "35% top",
+          scrub: true,
         },
       });
-      tl.to("[data-system-intro]", { opacity: 0, y: -35, duration: .7 }, 0)
-        .to("[data-energy-line]", { width: "84%", duration: 4.2, ease: "none" }, .4);
-      nodes.forEach((node, index) => {
-        tl.to(node, { opacity: 1, scale: 1.04, duration: .45 }, .5 + index * .78)
-          .to(node, { scale: 1, duration: .3 }, .86 + index * .78);
-      });
-      tl.fromTo("[data-system-result]", { opacity: 0, y: 25 }, { opacity: 1, y: 0, duration: .8 }, 4.4);
+
+      gsap.fromTo(
+        "[data-system-result]",
+        { opacity: 0, y: 24 },
+        {
+          opacity: 1,
+          y: 0,
+          ease: "none",
+          scrollTrigger: {
+            trigger: el,
+            start: "70% top",
+            end: "bottom bottom",
+            scrub: true,
+          },
+        },
+      );
+
+      return () => trigger.kill();
     }, el);
+
     return () => ctx.revert();
   }, []);
 
   return (
-    <section id="system" ref={root} className="relative h-[380vh] border-t border-white/8">
-      <div ref={scene} className="flex h-[100svh] items-center overflow-hidden">
-        <div className="container-wp w-full">
-          <div data-system-intro className="mb-12 flex items-end justify-between gap-8">
-            <div>
-              <span className="eyebrow">Le système énergétique</span>
-              <h2 className="mt-5 max-w-4xl text-[clamp(2.8rem,7vw,7rem)] font-medium leading-[.9] tracking-[-.055em]">Un flux continu.</h2>
-            </div>
-            <p className="hidden max-w-xs text-sm leading-relaxed text-white/45 md:block">L&apos;énergie circule entre chaque composant. Watt Power rend l&apos;ensemble du parcours visible.</p>
+    <section id="system" ref={root} className="relative h-[420vh] border-t border-white/8 bg-[#080a0b]">
+      <div ref={scene} className="relative flex h-[100svh] items-center overflow-hidden">
+        <div className="absolute inset-0">
+          <EnergySystemScene progress={progress} />
+        </div>
+
+        <div className="energy-grid pointer-events-none absolute inset-0 opacity-15" />
+        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(8,10,11,.78),transparent_28%,transparent_72%,rgba(8,10,11,.72))]" />
+
+        <div className="container-wp pointer-events-none relative z-10 flex h-full flex-col justify-between py-24">
+          <div data-system-intro className="max-w-3xl">
+            <span className="eyebrow">Le système énergétique</span>
+            <h2 className="mt-5 text-[clamp(2.8rem,7vw,7rem)] font-medium leading-[.9] tracking-[-.055em]">L&apos;énergie devient visible.</h2>
+            <p className="mt-6 max-w-md text-sm leading-relaxed text-white/42 md:text-base">Faites défiler : la caméra traverse le système Watt Power, de la production solaire jusqu&apos;à la maison.</p>
           </div>
-          <EnergyFlow />
-          <p data-system-result className="mx-auto mt-12 max-w-xl text-center text-sm leading-relaxed text-white/48 opacity-0 md:text-base">
-            Production, stockage, consommation et état du système réunis dans une seule expérience lisible.
-          </p>
+
+          <div>
+            <p data-system-result className="mb-8 max-w-xl text-sm leading-relaxed text-white/54 opacity-0 md:text-base">
+              Production, conversion, stockage et consommation sont reliés par un même flux énergétique.
+            </p>
+            <div className="grid grid-cols-5 border-t border-white/10 pt-4">
+              {stages.map((stage, index) => (
+                <div key={stage} className="min-w-0">
+                  <div className="text-[8px] tabular-nums text-white/20">0{index + 1}</div>
+                  <div className="mt-1 truncate text-[8px] uppercase tracking-[.11em] text-white/42 sm:text-[10px] md:text-[11px]">{stage}</div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </section>
