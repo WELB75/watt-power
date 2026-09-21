@@ -8,9 +8,9 @@ import { HeroEnergyScene } from "@/components/three/HeroEnergyScene";
 gsap.registerPlugin(ScrollTrigger);
 
 const telemetry = [
-  ["Entrée solaire", "EN DIRECT"],
-  ["État du système", "OPÉRATIONNEL"],
-  ["Synchronisation app", "CONNECTÉE"],
+  ["Production", "TEMPS RÉEL"],
+  ["Installation", "CONNECTÉE"],
+  ["Pilotage", "APPLICATION"],
 ];
 
 export function Hero() {
@@ -23,85 +23,72 @@ export function Hero() {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const ctx = gsap.context(() => {
       if (reduced) {
-        gsap.set("[data-hero-word],[data-hero-copy],[data-hero-visual],[data-telemetry]", { opacity: 1, y: 0 });
+        gsap.set("[data-hero-word],[data-hero-copy],[data-hero-scene],[data-telemetry]", { opacity: 1, y: 0 });
         return;
       }
 
       const intro = gsap.timeline({ defaults: { ease: "power4.out" } });
       intro
-        .from("[data-hero-kicker]", { opacity: 0, y: 14, duration: 0.7 })
-        .from("[data-hero-word]", { yPercent: 115, duration: 1.15, stagger: 0.08 }, "-=.35")
-        .from("[data-hero-copy]", { opacity: 0, y: 24, duration: 0.85 }, "-=.55")
-        .from("[data-hero-visual]", { opacity: 0, scale: 0.92, duration: 1.35 }, "-=1.05")
-        .from("[data-telemetry]", { opacity: 0, y: 12, duration: 0.6, stagger: 0.08 }, "-=.75");
+        .from("[data-hero-kicker]", { opacity: 0, y: 12, duration: 0.65 })
+        .from("[data-hero-word]", { yPercent: 112, duration: 1.15, stagger: 0.07 }, "-=.3")
+        .from("[data-hero-copy]", { opacity: 0, y: 20, duration: 0.8 }, "-=.55")
+        .from("[data-hero-scene]", { opacity: 0, scale: 1.04, duration: 1.5 }, "-=1.2")
+        .from("[data-telemetry]", { opacity: 0, y: 10, duration: 0.55, stagger: 0.08 }, "-=.8");
 
       gsap.timeline({
-        scrollTrigger: {
-          trigger: el,
-          start: "top top",
-          end: "bottom top",
-          scrub: 1,
-        },
+        scrollTrigger: { trigger: el, start: "top top", end: "bottom top", scrub: 1 },
       })
-        .to("[data-hero-visual]", { yPercent: 10, scale: 1.035, ease: "none" }, 0)
-        .to("[data-hero-copy]", { yPercent: -10, opacity: 0.35, ease: "none" }, 0);
+        .to("[data-hero-scene]", { yPercent: 7, scale: 1.035, ease: "none" }, 0)
+        .to("[data-hero-copy]", { yPercent: -9, opacity: 0.22, ease: "none" }, 0);
     }, el);
 
     return () => ctx.revert();
   }, []);
 
   return (
-    <section id="top" ref={root} className="relative min-h-[100svh] overflow-hidden pt-18">
-      <div className="energy-grid absolute inset-0 opacity-35" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_46%,rgba(217,255,90,.075),transparent_28%),radial-gradient(circle_at_15%_90%,rgba(255,255,255,.04),transparent_24%)]" />
-      <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-[#080a0b] to-transparent" />
+    <section id="top" ref={root} className="relative min-h-[100svh] overflow-hidden bg-[#060806] pt-18">
+      <div data-hero-scene className="absolute inset-0 lg:left-[24%]">
+        <HeroEnergyScene />
+      </div>
 
-      <div className="container-wp relative flex min-h-[calc(100svh-4.5rem)] flex-col justify-between py-8 md:py-12">
-        <div data-hero-kicker className="flex items-center justify-between gap-6 pt-5 text-[10px] uppercase tracking-[.18em] text-white/38">
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,#060806_0%,rgba(6,8,6,.96)_20%,rgba(6,8,6,.68)_41%,rgba(6,8,6,.12)_69%,rgba(6,8,6,.3)_100%)]" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[38vh] bg-gradient-to-t from-[#060806] via-[#060806]/65 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#060806]/70 to-transparent" />
+
+      <div className="container-wp relative z-10 flex min-h-[calc(100svh-4.5rem)] flex-col justify-between py-8 md:py-11">
+        <div data-hero-kicker className="flex items-center justify-between gap-6 pt-4 text-[10px] uppercase tracking-[.18em] text-white/36">
           <div className="flex items-center gap-3"><span className="accent-dot" /> Énergie solaire intelligente — Marrakech</div>
-          <span className="hidden md:block">Entreprise technologique / systèmes énergétiques</span>
+          <span className="hidden lg:block">Production · stockage · pilotage</span>
         </div>
 
-        <div className="grid items-center gap-8 lg:grid-cols-[1.02fr_.98fr]">
-          <div data-hero-copy className="relative z-10 pt-10 lg:pt-0">
-            <div className="overflow-hidden"><h1 data-hero-word className="display-xl">WATT</h1></div>
-            <div className="overflow-hidden"><h1 data-hero-word className="display-xl text-white/32">POWER.</h1></div>
+        <div data-hero-copy className="max-w-[880px] pb-[10vh] pt-[18vh] lg:pb-[7vh]">
+          <div className="overflow-hidden"><h1 data-hero-word className="display-xl">WATT</h1></div>
+          <div className="overflow-hidden"><h1 data-hero-word className="display-xl text-white/31">POWER.</h1></div>
 
-            <div className="mt-8 grid max-w-2xl gap-7 md:grid-cols-[1fr_auto] md:items-end">
-              <div>
-                <p className="max-w-md text-base leading-relaxed text-white/55 md:text-lg">L&apos;énergie. Sous contrôle.</p>
-                <p className="mt-2 max-w-lg text-sm leading-relaxed text-white/32">Produisez. Stockez. Suivez. Optimisez. Un seul système intelligent, visible depuis votre téléphone.</p>
-              </div>
-              <a href="#system" className="group flex w-fit items-center gap-3 text-[10px] uppercase tracking-[.16em] text-white/42 transition hover:text-white">
-                Découvrir le système
-                <span className="flex h-9 w-9 items-center justify-center rounded-full border border-white/12 transition group-hover:border-white/30 group-hover:bg-white/[.04]">↓</span>
-              </a>
+          <div className="mt-8 flex max-w-2xl flex-col gap-7 md:flex-row md:items-end md:justify-between">
+            <div>
+              <p className="max-w-md text-lg leading-relaxed text-white/67 md:text-xl">Votre énergie. Sous contrôle.</p>
+              <p className="mt-2 max-w-lg text-sm leading-relaxed text-white/36">
+                Une installation solaire pensée comme un système technologique complet, du toit jusqu&apos;à votre téléphone.
+              </p>
             </div>
-          </div>
-
-          <div data-hero-visual className="relative mx-auto aspect-square w-full max-w-[720px]">
-            <div className="absolute inset-[-8%]">
-              <HeroEnergyScene />
-            </div>
-
-            <div className="pointer-events-none absolute left-[2%] top-[21%] rounded-2xl border border-white/10 bg-black/30 px-4 py-3 backdrop-blur-xl">
-              <div className="text-[8px] uppercase tracking-[.16em] text-white/28">Entrée</div>
-              <div className="mt-1 text-sm tracking-[-.03em]">Énergie solaire</div>
-            </div>
-            <div className="pointer-events-none absolute bottom-[13%] right-[2%] rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-right backdrop-blur-xl">
-              <div className="text-[8px] uppercase tracking-[.16em] text-white/28">Couche de contrôle</div>
-              <div className="mt-1 text-sm tracking-[-.03em]">Application Watt Power</div>
-            </div>
+            <a href="#system" className="group flex w-fit items-center gap-3 text-[10px] uppercase tracking-[.16em] text-white/45 transition hover:text-white">
+              Explorer le système
+              <span className="flex h-10 w-10 items-center justify-center rounded-full border border-white/14 bg-white/[.025] transition group-hover:border-white/30 group-hover:bg-white/[.06]">↓</span>
+            </a>
           </div>
         </div>
 
-        <div className="grid gap-5 border-t border-white/10 pt-5 md:grid-cols-[auto_1fr] md:items-end">
-          <span className="text-[10px] uppercase tracking-[.15em] text-white/28">01 / Énergie intelligente</span>
-          <div className="grid gap-px overflow-hidden rounded-xl border border-white/8 bg-white/[.08] sm:grid-cols-3 md:ml-auto md:w-[min(100%,620px)]">
+        <div className="flex flex-col gap-5 border-t border-white/[.09] pt-5 md:flex-row md:items-end md:justify-between">
+          <span className="text-[9px] uppercase tracking-[.15em] text-white/25">01 / Watt Power</span>
+          <div className="grid w-full max-w-[660px] grid-cols-3 gap-5">
             {telemetry.map(([label, value]) => (
-              <div data-telemetry key={label} className="bg-[#080a0b]/95 px-4 py-3">
-                <div className="text-[8px] uppercase tracking-[.14em] text-white/25">{label}</div>
-                <div className="mt-1 flex items-center gap-2 text-[10px] tracking-[.08em] text-white/62"><span className="h-1 w-1 rounded-full bg-[color:var(--accent)] shadow-[0_0_10px_rgba(217,255,90,.6)]" />{value}</div>
+              <div data-telemetry key={label} className="border-l border-white/[.09] pl-4">
+                <div className="text-[8px] uppercase tracking-[.14em] text-white/23">{label}</div>
+                <div className="mt-1 flex items-center gap-2 text-[9px] uppercase tracking-[.1em] text-white/58">
+                  <span className="h-1 w-1 rounded-full bg-[color:var(--accent)] shadow-[0_0_10px_rgba(217,255,90,.6)]" />
+                  {value}
+                </div>
               </div>
             ))}
           </div>
