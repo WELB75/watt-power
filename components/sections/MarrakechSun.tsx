@@ -35,13 +35,13 @@ export function MarrakechSun() {
       <div data-sun-glow className="absolute left-[55%] top-[24%] h-[42vw] w-[42vw] min-h-72 min-w-72 rounded-full bg-[radial-gradient(circle,rgba(244,239,194,.8)_0%,rgba(217,255,90,.16)_34%,transparent_70%)] blur-2xl" />
       <div className="container-wp relative grid min-h-[110vh] items-center gap-14 py-28 lg:grid-cols-[.9fr_1.1fr]">
         <div className="relative z-10">
-          <span className="eyebrow">Marrakech / sunlight</span>
-          <AnimatedHeading className="mt-6"><h2 className="display-lg text-balance">Sunlight becomes a system.</h2></AnimatedHeading>
+          <span className="eyebrow">Marrakech / soleil</span>
+          <AnimatedHeading className="mt-6"><h2 className="display-lg text-balance">Le soleil devient un système.</h2></AnimatedHeading>
           <p className="mt-8 max-w-lg text-lg leading-relaxed text-white/52">
-            Watt Power turns a local resource into energy you can produce, monitor and control — without hiding behind technical complexity.
+            Watt Power transforme une ressource locale en énergie que vous pouvez produire, suivre et contrôler — sans masquer la technologie derrière de la complexité.
           </p>
           <div className="mt-10 w-fit rounded-full border border-white/10 bg-black/25 px-4 py-3 text-[10px] uppercase tracking-[.15em] text-white/42 backdrop-blur-lg">
-            Local solar potential data — verified figures to be inserted
+            Potentiel solaire local — données vérifiées à intégrer
           </div>
         </div>
 
