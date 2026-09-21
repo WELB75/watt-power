@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { EnergySystemScene } from "@/components/three/EnergySystemScene";
+import { SceneGate } from "@/components/three/SceneGate";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -60,7 +61,7 @@ export function EnergySystem() {
     <section id="system" ref={root} className="relative h-[430vh] bg-[#060806]">
       <div ref={scene} className="relative flex h-[100svh] items-center overflow-hidden">
         <div className="absolute inset-0 lg:left-[13%] lg:right-[4%]">
-          <EnergySystemScene progress={progress} />
+          <SceneGate rootMargin="30% 0px"><EnergySystemScene progress={progress} /></SceneGate>
         </div>
 
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,#060806_0%,rgba(6,8,6,.92)_18%,rgba(6,8,6,.14)_42%,rgba(6,8,6,.05)_68%,rgba(6,8,6,.56)_100%)]" />
