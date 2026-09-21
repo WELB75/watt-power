@@ -50,14 +50,14 @@ export function EnergySystem() {
         <div className="container-wp w-full">
           <div data-system-intro className="mb-12 flex items-end justify-between gap-8">
             <div>
-              <span className="eyebrow">The energy system</span>
-              <h2 className="mt-5 max-w-4xl text-[clamp(2.8rem,7vw,7rem)] font-medium leading-[.9] tracking-[-.055em]">One continuous flow.</h2>
+              <span className="eyebrow">Le système énergétique</span>
+              <h2 className="mt-5 max-w-4xl text-[clamp(2.8rem,7vw,7rem)] font-medium leading-[.9] tracking-[-.055em]">Un flux continu.</h2>
             </div>
-            <p className="hidden max-w-xs text-sm leading-relaxed text-white/45 md:block">Energy moves through each component. Watt Power makes the entire path visible.</p>
+            <p className="hidden max-w-xs text-sm leading-relaxed text-white/45 md:block">L&apos;énergie circule entre chaque composant. Watt Power rend l&apos;ensemble du parcours visible.</p>
           </div>
           <EnergyFlow />
           <p data-system-result className="mx-auto mt-12 max-w-xl text-center text-sm leading-relaxed text-white/48 opacity-0 md:text-base">
-            Production, storage, consumption and system status become one readable experience.
+            Production, stockage, consommation et état du système réunis dans une seule expérience lisible.
           </p>
         </div>
       </div>
