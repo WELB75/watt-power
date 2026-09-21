@@ -7,10 +7,10 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 const benefits = [
-  ["01", "Produce", "Turn sunlight into usable power."],
-  ["02", "Store", "Keep energy available when your system includes storage."],
-  ["03", "Monitor", "Follow production and consumption in real time."],
-  ["04", "Optimise", "Use visibility to make better energy decisions."],
+  ["01", "Produire", "Transformez la lumière du soleil en énergie utilisable."],
+  ["02", "Stocker", "Gardez de l’énergie disponible lorsque votre installation comprend une batterie."],
+  ["03", "Suivre", "Visualisez la production et la consommation en temps réel."],
+  ["04", "Optimiser", "Utilisez les données pour mieux piloter votre énergie."],
 ];
 
 export function IntelligentEnergy() {
@@ -36,7 +36,7 @@ export function IntelligentEnergy() {
     <section ref={root} className="section-pad border-t border-white/8">
       <div className="container-wp">
         <div className="mb-16 flex items-end justify-between gap-8">
-          <div><span className="eyebrow">Intelligent energy</span><h2 className="mt-5 text-[clamp(3rem,7vw,7.5rem)] font-medium leading-[.9] tracking-[-.06em]">Four actions.<br /><span className="text-white/30">One system.</span></h2></div>
+          <div><span className="eyebrow">Énergie intelligente</span><h2 className="mt-5 text-[clamp(3rem,7vw,7.5rem)] font-medium leading-[.9] tracking-[-.06em]">Quatre actions.<br /><span className="text-white/30">Un seul système.</span></h2></div>
         </div>
         <div className="border-t border-white/10">
           {benefits.map(([n, title, copy]) => (
