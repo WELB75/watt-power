@@ -1,120 +1,219 @@
 "use client";
 
-import { Suspense, useEffect, useMemo, useRef } from "react";
 import type { MutableRefObject } from "react";
+import { Suspense, useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
+import { ExplodedSolarPanel } from "@/components/three/ExplodedSolarPanel";
 import { RealModel } from "@/components/three/RealModel";
 import { REAL_ASSETS } from "@/components/three/realAssets";
 
-const panelPositions: Array<[number, number, number]> = [
-  [-1.55, 1.22, -0.72],
-  [-0.45, 1.22, -0.72],
-  [0.65, 1.22, -0.72],
-  [1.75, 1.22, -0.72],
-  [-1.55, 1.22, 0.08],
-  [-0.45, 1.22, 0.08],
-  [0.65, 1.22, 0.08],
-  [1.75, 1.22, 0.08],
+function clamp01(value: number) {
+  return THREE.MathUtils.clamp(value, 0, 1);
+}
+
+function range(value: number, start: number, end: number) {
+  return clamp01((value - start) / (end - start));
+}
+
+const ROOF_TARGETS: Array<[number, number, number]> = [
+  [-1.9, 2.0, -0.62],
+  [-0.95, 2.0, -0.62],
+  [0, 2.0, -0.62],
+  [0.95, 2.0, -0.62],
+  [1.9, 2.0, -0.62],
+  [-1.9, 2.0, 0.12],
+  [-0.95, 2.0, 0.12],
+  [0, 2.0, 0.12],
+  [0.95, 2.0, 0.12],
+  [1.9, 2.0, 0.12],
 ];
 
-function EnergyPulse({
-  curve,
-  reducedMotion,
+function RoofPanelSurface() {
+  return (
+    <group>
+      <mesh castShadow>
+        <boxGeometry args={[0.88, 0.055, 0.64]} />
+        <meshPhysicalMaterial
+          color="#adb3b7"
+          metalness={0.92}
+          roughness={0.21}
+          clearcoat={0.55}
+        />
+      </mesh>
+      <mesh position={[0, 0.034, 0]}>
+        <boxGeometry args={[0.8, 0.018, 0.56]} />
+        <meshPhysicalMaterial
+          color="#173d68"
+          metalness={0.4}
+          roughness={0.17}
+          clearcoat={0.92}
+          clearcoatRoughness={0.12}
+        />
+      </mesh>
+      <mesh position={[0, 0.045, 0]}>
+        <planeGeometry args={[0.76, 0.52]} />
+        <meshBasicMaterial color="#c8d8e3" transparent opacity={0.055} />
+      </mesh>
+    </group>
+  );
+}
+
+function InstalledPanel({
+  progress,
+  index,
+  target,
 }: {
-  curve: THREE.CatmullRomCurve3;
-  reducedMotion: MutableRefObject<boolean>;
+  progress: MutableRefObject<number>;
+  index: number;
+  target: [number, number, number];
 }) {
-  const pulse = useRef<THREE.Group>(null);
-
-  useFrame(({ clock }) => {
-    if (!pulse.current || reducedMotion.current) return;
-    pulse.current.position.copy(curve.getPointAt((clock.elapsedTime * 0.1) % 1));
-  });
-
-  return (
-    <group ref={pulse}>
-      <mesh>
-        <sphereGeometry args={[0.075, 18, 18]} />
-        <meshBasicMaterial color="#ecffab" />
-      </mesh>
-      <pointLight intensity={4.8} distance={2.3} color="#d9ff5a" />
-    </group>
-  );
-}
-
-function RealSolarVilla() {
-  return (
-    <group position={[0, -0.65, 0]} rotation={[0, -0.28, 0]}>
-      <RealModel url={REAL_ASSETS.modernHouse} fit={7.2} />
-
-      <group rotation={[0.03, 0, -0.02]}>
-        {panelPositions.map((position, index) => (
-          <RealModel
-            key={index}
-            url={REAL_ASSETS.solarPanel}
-            fit={1.15}
-            position={position}
-            rotation={[0.08, 0, 0]}
-          />
-        ))}
-      </group>
-
-      <mesh receiveShadow position={[0.25, -1.0, 2.0]}>
-        <boxGeometry args={[4.4, 0.08, 1.5]} />
-        <meshPhysicalMaterial color="#173536" metalness={0.06} roughness={0.12} />
-      </mesh>
-      <mesh position={[0.25, -0.95, 2.01]}>
-        <planeGeometry args={[4.05, 1.18]} />
-        <meshBasicMaterial color="#9bc8bd" transparent opacity={0.18} />
-      </mesh>
-    </group>
-  );
-}
-
-function HeroWorld() {
   const root = useRef<THREE.Group>(null);
-  const reducedMotion = useRef(false);
 
-  const energyCurve = useMemo(
-    () =>
-      new THREE.CatmullRomCurve3([
-        new THREE.Vector3(4.4, 4.0, -2.4),
-        new THREE.Vector3(3.0, 3.0, -1.5),
-        new THREE.Vector3(1.5, 2.1, -0.8),
-        new THREE.Vector3(0.2, 1.45, -0.25),
-        new THREE.Vector3(-0.7, 1.15, 0.15),
-      ]),
-    [],
-  );
+  useFrame((_, delta) => {
+    const p = clamp01(progress.current);
+    const installation = range(p, 0.62, 0.96);
+    const stagger = index * 0.045;
+    const local = clamp01((installation - stagger) / Math.max(0.12, 1 - stagger));
+    const eased = THREE.MathUtils.smoothstep(local, 0, 1);
 
-  useEffect(() => {
-    reducedMotion.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  }, []);
+    if (!root.current) return;
 
-  useFrame((state, delta) => {
-    const group = root.current;
-    if (!group) return;
+    const fanX = (index - 4.5) * 0.18;
+    const fanZ = (index % 2 === 0 ? -1 : 1) * 0.28;
+    const start = new THREE.Vector3(fanX, 4.7 + index * 0.06, 3.4 + fanZ);
+    const end = new THREE.Vector3(...target);
 
-    const px = reducedMotion.current ? 0 : state.pointer.x;
-    const py = reducedMotion.current ? 0 : state.pointer.y;
-    group.rotation.y = THREE.MathUtils.damp(group.rotation.y, px * 0.04, 3.2, delta);
-    group.rotation.x = THREE.MathUtils.damp(group.rotation.x, py * -0.018, 3.2, delta);
+    root.current.position.lerpVectors(start, end, eased);
+    root.current.rotation.x = THREE.MathUtils.damp(
+      root.current.rotation.x,
+      THREE.MathUtils.lerp(-0.55, -0.08, eased),
+      7,
+      delta,
+    );
+    root.current.rotation.y = THREE.MathUtils.damp(
+      root.current.rotation.y,
+      THREE.MathUtils.lerp((index - 4.5) * 0.035, 0, eased),
+      7,
+      delta,
+    );
+    root.current.rotation.z = THREE.MathUtils.damp(
+      root.current.rotation.z,
+      THREE.MathUtils.lerp((index % 2 === 0 ? -1 : 1) * 0.09, 0.015, eased),
+      7,
+      delta,
+    );
 
-    state.camera.position.x = THREE.MathUtils.damp(state.camera.position.x, 7.1 + px * 0.32, 2.7, delta);
-    state.camera.position.y = THREE.MathUtils.damp(state.camera.position.y, 3.2 + py * 0.18, 2.7, delta);
-    state.camera.lookAt(0.15, 0.45, 0);
+    const scale = THREE.MathUtils.damp(root.current.scale.x, 0.2 + eased * 0.8, 7, delta);
+    root.current.scale.setScalar(scale);
   });
 
   return (
     <group ref={root}>
-      <ambientLight intensity={0.58} />
-      <hemisphereLight args={["#f7ead2", "#18231d", 1.1]} />
+      <RoofPanelSurface />
+    </group>
+  );
+}
+
+function VillaInstallation({
+  progress,
+}: {
+  progress: MutableRefObject<number>;
+}) {
+  const root = useRef<THREE.Group>(null);
+
+  useFrame((_, delta) => {
+    const reveal = THREE.MathUtils.smoothstep(progress.current, 0.5, 0.7);
+    if (!root.current) return;
+
+    root.current.position.y = THREE.MathUtils.damp(root.current.position.y, THREE.MathUtils.lerp(-6.2, -1.25, reveal), 4, delta);
+    root.current.position.z = THREE.MathUtils.damp(root.current.position.z, THREE.MathUtils.lerp(-5.5, 0, reveal), 4, delta);
+    root.current.rotation.y = THREE.MathUtils.damp(root.current.rotation.y, THREE.MathUtils.lerp(-0.4, -0.27, reveal), 4, delta);
+
+    const scale = THREE.MathUtils.damp(root.current.scale.x, THREE.MathUtils.lerp(0.7, 1, reveal), 4, delta);
+    root.current.scale.setScalar(scale);
+  });
+
+  return (
+    <group ref={root}>
+      <Suspense fallback={null}>
+        <RealModel url={REAL_ASSETS.modernHouse} fit={7.3} />
+      </Suspense>
+
+      {ROOF_TARGETS.map((target, index) => (
+        <InstalledPanel
+          key={index}
+          progress={progress}
+          index={index}
+          target={target}
+        />
+      ))}
+
+      <mesh receiveShadow position={[0.45, -1.05, 2.05]}>
+        <boxGeometry args={[4.55, 0.08, 1.55]} />
+        <meshPhysicalMaterial color="#173d42" metalness={0.05} roughness={0.1} />
+      </mesh>
+      <mesh position={[0.45, -1.0, 2.06]}>
+        <planeGeometry args={[4.15, 1.22]} />
+        <meshBasicMaterial color="#92d0d0" transparent opacity={0.21} />
+      </mesh>
+    </group>
+  );
+}
+
+function HeroWorld({
+  progress,
+}: {
+  progress: MutableRefObject<number>;
+}) {
+  const rig = useRef<THREE.Group>(null);
+
+  useFrame((state, delta) => {
+    const p = clamp01(progress.current);
+    const wide = THREE.MathUtils.smoothstep(p, 0.5, 0.76);
+
+    const closeCamera = new THREE.Vector3(0.3, 0.1, 7.4);
+    const wideCamera = new THREE.Vector3(6.7, 3.15, 8.8);
+    const desiredCamera = closeCamera.clone().lerp(wideCamera, wide);
+
+    state.camera.position.x = THREE.MathUtils.damp(state.camera.position.x, desiredCamera.x, 3.2, delta);
+    state.camera.position.y = THREE.MathUtils.damp(state.camera.position.y, desiredCamera.y, 3.2, delta);
+    state.camera.position.z = THREE.MathUtils.damp(state.camera.position.z, desiredCamera.z, 3.2, delta);
+
+    const lookAt = new THREE.Vector3(
+      THREE.MathUtils.lerp(0.5, 0.15, wide),
+      THREE.MathUtils.lerp(0.1, 0.15, wide),
+      THREE.MathUtils.lerp(0.1, 0, wide),
+    );
+    state.camera.lookAt(lookAt);
+
+    if (rig.current) {
+      const pointerInfluence = 1 - wide;
+      rig.current.rotation.y = THREE.MathUtils.damp(
+        rig.current.rotation.y,
+        state.pointer.x * 0.045 * pointerInfluence,
+        3,
+        delta,
+      );
+      rig.current.rotation.x = THREE.MathUtils.damp(
+        rig.current.rotation.x,
+        state.pointer.y * -0.02 * pointerInfluence,
+        3,
+        delta,
+      );
+    }
+  });
+
+  return (
+    <group ref={rig}>
+      <ambientLight intensity={0.62} />
+      <hemisphereLight args={["#f5ead9", "#17221c", 1.05]} />
+
       <directionalLight
         castShadow
         position={[6.5, 8, 5]}
         intensity={4.8}
-        color="#ffe7c2"
+        color="#ffe3bd"
         shadow-mapSize-width={1024}
         shadow-mapSize-height={1024}
         shadow-camera-left={-8}
@@ -122,44 +221,29 @@ function HeroWorld() {
         shadow-camera-top={8}
         shadow-camera-bottom={-8}
       />
-      <pointLight position={[4.4, 4.0, -2.4]} intensity={34} distance={13} color="#e2ff73" />
 
-      <Suspense fallback={null}>
-        <RealSolarVilla />
-      </Suspense>
+      <pointLight position={[4.8, 3.8, 1.2]} intensity={18} distance={12} color="#d9ff5a" />
 
-      <mesh position={[4.4, 4.0, -2.4]}>
-        <sphereGeometry args={[0.55, 42, 42]} />
-        <meshBasicMaterial color="#edffa8" />
-      </mesh>
-      <mesh position={[4.4, 4.0, -2.45]}>
-        <sphereGeometry args={[1.22, 42, 42]} />
-        <meshBasicMaterial color="#d9ff5a" transparent opacity={0.05} depthWrite={false} />
-      </mesh>
+      <ExplodedSolarPanel progress={progress} />
+      <VillaInstallation progress={progress} />
 
-      <mesh>
-        <tubeGeometry args={[energyCurve, 96, 0.018, 9, false]} />
-        <meshBasicMaterial color="#d9ff5a" transparent opacity={0.72} />
-      </mesh>
-      <mesh>
-        <tubeGeometry args={[energyCurve, 96, 0.065, 9, false]} />
-        <meshBasicMaterial color="#d9ff5a" transparent opacity={0.05} />
-      </mesh>
-      <EnergyPulse curve={energyCurve} reducedMotion={reducedMotion} />
-
-      <mesh receiveShadow position={[0, -1.72, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <planeGeometry args={[22, 18]} />
-        <meshStandardMaterial color="#111511" roughness={1} />
+      <mesh receiveShadow position={[0, -2.25, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <planeGeometry args={[24, 18]} />
+        <meshStandardMaterial color="#0c100d" roughness={1} />
       </mesh>
     </group>
   );
 }
 
-export function HeroEnergyScene() {
+export function HeroEnergyScene({
+  progress,
+}: {
+  progress: MutableRefObject<number>;
+}) {
   return (
     <Canvas
       shadows
-      camera={{ position: [7.1, 3.2, 8.7], fov: 37 }}
+      camera={{ position: [0.3, 0.1, 7.4], fov: 35 }}
       dpr={[1, 1.2]}
       gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }}
       onCreated={({ gl }) => {
@@ -170,8 +254,8 @@ export function HeroEnergyScene() {
       }}
       style={{ width: "100%", height: "100%" }}
     >
-      <fog attach="fog" args={["#060806", 12, 22]} />
-      <HeroWorld />
+      <fog attach="fog" args={["#060806", 12.5, 23]} />
+      <HeroWorld progress={progress} />
     </Canvas>
   );
 }
