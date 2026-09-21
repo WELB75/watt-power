@@ -146,3 +146,176 @@ a {
     scroll-behavior: auto !important;
   }
 }
+
+
+/* Premium solar product scene */
+.solar-layer,
+.solar-frame,
+.solar-junction {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 72%;
+  aspect-ratio: 1.62 / 1;
+  transform: translate(-50%, -50%);
+  border-radius: 1.25rem;
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+}
+
+.solar-backsheet {
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.35), transparent 36%),
+    #e6e8e5;
+  border: 1px solid rgba(255,255,255,.5);
+  box-shadow: 0 22px 55px rgba(0,0,0,.35);
+}
+
+.solar-eva {
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.36), rgba(255,255,255,.08)),
+    rgba(236,240,232,.2);
+  border: 1px solid rgba(255,255,255,.22);
+  backdrop-filter: blur(1px);
+}
+
+.solar-cells {
+  overflow: hidden;
+  background:
+    linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px),
+    linear-gradient(rgba(255,255,255,.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.12) 1px, transparent 1px),
+    linear-gradient(135deg, rgba(255,255,255,.14), transparent 24%),
+    #163c66;
+  background-size:
+    100% calc(100% / 6),
+    calc(100% / 12) 100%,
+    100% calc(100% / 12),
+    calc(100% / 24) 100%,
+    100% 100%,
+    100% 100%;
+  border: 1px solid rgba(215,230,240,.55);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.08),
+    0 20px 50px rgba(0,0,0,.38);
+}
+
+.solar-cells::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 22% 22%, rgba(255,255,255,.1), transparent 23%),
+    linear-gradient(120deg, transparent 0 48%, rgba(255,255,255,.08) 52%, transparent 58%);
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.solar-glass {
+  background:
+    linear-gradient(135deg, rgba(219,241,249,.26), rgba(255,255,255,.03) 46%, rgba(212,236,248,.14)),
+    rgba(192,220,231,.06);
+  border: 1px solid rgba(225,244,255,.3);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.4),
+    0 28px 70px rgba(0,0,0,.22);
+  backdrop-filter: blur(.5px);
+}
+
+.solar-frame {
+  border: clamp(5px, .5vw, 9px) solid #b9bec1;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.75),
+    inset 0 0 0 3px rgba(30,34,36,.18),
+    0 18px 45px rgba(0,0,0,.3);
+  background: transparent;
+  z-index: 20;
+}
+
+.solar-junction {
+  width: 17%;
+  aspect-ratio: 1.65 / 1;
+  left: 58%;
+  top: 74%;
+  border-radius: .55rem;
+  background: linear-gradient(145deg, #171a1a, #050606);
+  border: 1px solid rgba(255,255,255,.08);
+  box-shadow: 0 14px 28px rgba(0,0,0,.4);
+  z-index: -2;
+}
+
+.solar-junction::before,
+.solar-junction::after {
+  content: "";
+  position: absolute;
+  top: 78%;
+  width: 4px;
+  height: 48px;
+  border-radius: 999px;
+  background: #161919;
+  transform-origin: top;
+}
+
+.solar-junction::before {
+  left: 35%;
+  transform: rotate(15deg);
+}
+
+.solar-junction::after {
+  right: 35%;
+  transform: rotate(-15deg);
+}
+
+.roof-array {
+  transform-origin: center center;
+  will-change: opacity, transform;
+}
+
+.roof-panel {
+  position: relative;
+  aspect-ratio: 1.58 / 1;
+  border: 2px solid #aeb4b7;
+  border-radius: .35rem;
+  padding: 3px;
+  background: linear-gradient(135deg, #d5d8da, #7d8589 52%, #c6cbcd);
+  box-shadow:
+    0 8px 18px rgba(0,0,0,.3),
+    inset 0 1px 0 rgba(255,255,255,.65);
+  overflow: hidden;
+  will-change: transform, opacity;
+}
+
+.roof-panel-cells {
+  width: 100%;
+  height: 100%;
+  border-radius: .18rem;
+  background:
+    linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px),
+    linear-gradient(135deg, rgba(255,255,255,.16), transparent 28%),
+    #153d68;
+  background-size:
+    100% 33.333%,
+    16.666% 100%,
+    100% 100%,
+    100% 100%;
+}
+
+@media (max-width: 900px) {
+  [data-panel-stage] {
+    transform: rotateX(58deg) rotateZ(-7deg) scale(.86) !important;
+  }
+
+  .solar-layer,
+  .solar-frame,
+  .solar-junction {
+    width: 82%;
+  }
+
+  .roof-array {
+    right: 4% !important;
+    top: 18% !important;
+    width: 58% !important;
+  }
+}
