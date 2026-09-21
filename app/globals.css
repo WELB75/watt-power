@@ -1,0 +1,98 @@
+@import "tailwindcss";
+
+:root {
+  --background: #080a0b;
+  --surface: #0d1011;
+  --surface-2: #111516;
+  --foreground: #f2f1ec;
+  --muted: #92999a;
+  --line: rgba(255, 255, 255, 0.10);
+  --line-strong: rgba(255, 255, 255, 0.18);
+  --accent: #d9ff5a;
+  --accent-soft: rgba(217, 255, 90, 0.14);
+  --radius-sm: 0.75rem;
+  --radius-md: 1.25rem;
+  --radius-lg: 2rem;
+  --space-page: clamp(1.25rem, 3vw, 3rem);
+  --section-pad: clamp(6rem, 12vw, 12rem);
+}
+
+* { box-sizing: border-box; }
+html { background: var(--background); scroll-behavior: auto; }
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+  text-rendering: optimizeLegibility;
+}
+a { color: inherit; text-decoration: none; }
+button, a { -webkit-tap-highlight-color: transparent; }
+::selection { background: var(--accent); color: #080a0b; }
+
+.container-wp {
+  width: min(100%, 1600px);
+  margin: 0 auto;
+  padding-left: var(--space-page);
+  padding-right: var(--space-page);
+}
+
+.section-pad { padding-top: var(--section-pad); padding-bottom: var(--section-pad); }
+.eyebrow {
+  color: var(--muted);
+  font-size: 0.7rem;
+  line-height: 1;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.display-xl {
+  font-size: clamp(4rem, 11vw, 11rem);
+  line-height: 0.82;
+  letter-spacing: -0.065em;
+  font-weight: 560;
+}
+.display-lg {
+  font-size: clamp(3rem, 7.8vw, 8rem);
+  line-height: 0.9;
+  letter-spacing: -0.055em;
+  font-weight: 540;
+}
+.text-balance { text-wrap: balance; }
+.grid-line { border-color: var(--line); }
+.glass {
+  background: linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.025));
+  border: 1px solid var(--line);
+  backdrop-filter: blur(18px);
+}
+.accent-dot {
+  width: .45rem;
+  height: .45rem;
+  border-radius: 999px;
+  background: var(--accent);
+  box-shadow: 0 0 24px rgba(217, 255, 90, .6);
+}
+
+.energy-grid {
+  background-image:
+    linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
+}
+
+.solar-cell {
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.075), transparent 44%),
+    linear-gradient(180deg, #101719, #0b0f10);
+  border: 1px solid rgba(255,255,255,.09);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
