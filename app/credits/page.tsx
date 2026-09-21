@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export const metadata = {
   title: "Crédits 3D — Watt Power",
 };
@@ -51,9 +53,9 @@ export default function CreditsPage() {
   return (
     <main className="min-h-screen bg-[#060806] px-5 py-24 text-white md:px-12">
       <div className="mx-auto max-w-5xl">
-        <a href="/" className="text-[10px] uppercase tracking-[.16em] text-white/38 transition hover:text-white">
+        <Link href="/" className="text-[10px] uppercase tracking-[.16em] text-white/38 transition hover:text-white">
           ← Watt Power
-        </a>
+        </Link>
         <h1 className="mt-12 text-5xl font-medium tracking-[-.055em] md:text-7xl">Crédits 3D & visuels.</h1>
         <p className="mt-6 max-w-2xl text-base leading-relaxed text-white/48">
           Watt Power utilise des assets tiers sélectionnés pour le prototype visuel. Les références et licences sont conservées ici afin de garder une provenance claire.
