@@ -3,94 +3,72 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { EnergySystemScene } from "@/components/three/EnergySystemScene";
-import { SceneGate } from "@/components/three/SceneGate";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const stages = ["Panneaux", "Conversion", "Stockage", "Maison"];
+const stages = [
+  ["01", "Produire", "Les panneaux transforment la lumière en énergie."],
+  ["02", "Convertir", "L’onduleur rend cette énergie utilisable par le bâtiment."],
+  ["03", "Stocker", "La batterie conserve l’énergie disponible si elle est installée."],
+  ["04", "Piloter", "L’application centralise production, consommation et état du système."],
+];
 
 export function EnergySystem() {
   const root = useRef<HTMLElement>(null);
-  const scene = useRef<HTMLDivElement>(null);
-  const progress = useRef(0);
 
   useEffect(() => {
     const el = root.current;
-    const sc = scene.current;
-    if (!el || !sc) return;
+    if (!el) return;
 
     const ctx = gsap.context(() => {
-      const trigger = ScrollTrigger.create({
-        trigger: el,
-        start: "top top",
-        end: "+=330%",
-        pin: sc,
-        scrub: 1,
-        anticipatePin: 1,
-        onUpdate: (self) => {
-          progress.current = self.progress;
-        },
-      });
-
-      gsap.to("[data-system-intro]", {
-        opacity: 0.12,
-        y: -36,
+      gsap.fromTo("[data-flow-line]", { scaleX: 0 }, {
+        scaleX: 1,
         ease: "none",
-        scrollTrigger: { trigger: el, start: "top top", end: "32% top", scrub: true },
+        scrollTrigger: { trigger: el, start: "top 62%", end: "bottom 64%", scrub: true },
       });
 
-      gsap.fromTo(
-        "[data-system-result]",
-        { opacity: 0, y: 26 },
-        {
-          opacity: 1,
-          y: 0,
-          ease: "none",
-          scrollTrigger: { trigger: el, start: "66% top", end: "bottom bottom", scrub: true },
-        },
-      );
-
-      return () => trigger.kill();
+      gsap.from("[data-system-card]", {
+        opacity: 0,
+        y: 40,
+        stagger: .14,
+        duration: .8,
+        ease: "power3.out",
+        scrollTrigger: { trigger: el, start: "top 55%", once: true },
+      });
     }, el);
 
     return () => ctx.revert();
   }, []);
 
   return (
-    <section id="system" ref={root} className="relative h-[430vh] bg-[#060806]">
-      <div ref={scene} className="relative flex h-[100svh] items-center overflow-hidden">
-        <div className="absolute inset-0 lg:left-[13%] lg:right-[4%]">
-          <SceneGate rootMargin="30% 0px"><EnergySystemScene progress={progress} /></SceneGate>
+    <section id="system" ref={root} className="section-pad relative overflow-hidden border-t border-white/[.07] bg-[#050706]">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_32%,rgba(217,255,90,.055),transparent_31%)]" />
+      <div className="container-wp relative z-10">
+        <div className="grid gap-12 lg:grid-cols-[.8fr_1.2fr] lg:items-end">
+          <div>
+            <span className="eyebrow">Le système Watt Power</span>
+            <h2 className="mt-6 text-[clamp(3.2rem,7vw,7.4rem)] font-medium leading-[.88] tracking-[-.06em]">
+              Une énergie.<br /><span className="text-white/28">Un seul parcours.</span>
+            </h2>
+          </div>
+          <p className="max-w-lg text-base leading-relaxed text-white/46 lg:justify-self-end">
+            Pas de jargon inutile : nous relions production, conversion, stockage et pilotage dans une installation cohérente.
+          </p>
         </div>
 
-        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,#060806_0%,rgba(6,8,6,.92)_18%,rgba(6,8,6,.14)_42%,rgba(6,8,6,.05)_68%,rgba(6,8,6,.56)_100%)]" />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-64 bg-gradient-to-t from-[#060806] to-transparent" />
+        <div className="relative mt-24">
+          <div className="absolute left-0 right-0 top-10 h-px bg-white/[.08]" />
+          <div data-flow-line className="absolute left-0 right-0 top-10 h-px origin-left bg-[color:var(--accent)] shadow-[0_0_24px_rgba(217,255,90,.35)]" />
 
-        <div className="container-wp pointer-events-none relative z-10 flex h-full flex-col justify-between py-24">
-          <div data-system-intro className="max-w-2xl pt-[3vh]">
-            <span className="eyebrow">Architecture du système</span>
-            <h2 className="mt-5 text-[clamp(3rem,7vw,7rem)] font-medium leading-[.88] tracking-[-.058em]">
-              Une maison.<br /><span className="text-white/28">Un seul écosystème.</span>
-            </h2>
-            <p className="mt-6 max-w-md text-sm leading-relaxed text-white/45 md:text-base">
-              Le scroll révèle la logique complète de l&apos;installation : captation, conversion, stockage puis alimentation du logement.
-            </p>
-          </div>
-
-          <div>
-            <p data-system-result className="mb-8 max-w-xl text-sm leading-relaxed text-white/57 opacity-0 md:text-base">
-              Chaque composant reste identifiable, mais l&apos;expérience est pensée comme un système unique et cohérent.
-            </p>
-
-            <div className="grid max-w-3xl grid-cols-4 gap-4 border-t border-white/[.09] pt-4">
-              {stages.map((stage, index) => (
-                <div key={stage}>
-                  <div className="text-[8px] tabular-nums text-white/20">0{index + 1}</div>
-                  <div className="mt-1 text-[8px] uppercase tracking-[.12em] text-white/45 sm:text-[10px]">{stage}</div>
-                </div>
-              ))}
-            </div>
+          <div className="relative grid gap-5 md:grid-cols-4">
+            {stages.map(([number, title, copy]) => (
+              <article data-system-card key={number} className="relative pt-20">
+                <div className="absolute left-0 top-[34px] h-3 w-3 rounded-full border-2 border-[#050706] bg-[color:var(--accent)] shadow-[0_0_18px_rgba(217,255,90,.55)]" />
+                <div className="text-[9px] uppercase tracking-[.14em] text-white/24">{number}</div>
+                <h3 className="mt-4 text-3xl tracking-[-.045em]">{title}.</h3>
+                <p className="mt-4 max-w-[16rem] text-sm leading-relaxed text-white/40">{copy}</p>
+              </article>
+            ))}
           </div>
         </div>
       </div>
