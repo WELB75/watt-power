@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { PhoneScene } from "@/components/three/PhoneScene";
+import { SceneGate } from "@/components/three/SceneGate";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -53,7 +54,7 @@ export function AppExperience() {
       <div ref={scene} className="relative flex h-[100svh] items-center overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_51%_46%,rgba(217,255,90,.08),transparent_24%),radial-gradient(circle_at_74%_70%,rgba(90,120,255,.05),transparent_22%)]" />
         <div className="absolute inset-y-0 left-[21%] right-[21%]">
-          <PhoneScene progress={progress} />
+          <SceneGate rootMargin="30% 0px"><PhoneScene progress={progress} /></SceneGate>
         </div>
 
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,#060806_0%,rgba(6,8,6,.9)_18%,rgba(6,8,6,.12)_39%,rgba(6,8,6,.12)_63%,rgba(6,8,6,.9)_84%,#060806_100%)]" />
