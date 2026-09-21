@@ -4,91 +4,72 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { AnimatedHeading } from "@/components/motion/AnimatedHeading";
-import { MarrakechScene } from "@/components/three/MarrakechScene";
-import { SceneGate } from "@/components/three/SceneGate";
-import { REAL_ASSETS } from "@/components/three/realAssets";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export function MarrakechSun() {
   const root = useRef<HTMLElement>(null);
-  const progress = useRef(0);
 
   useEffect(() => {
     const el = root.current;
     if (!el) return;
 
     const ctx = gsap.context(() => {
-      ScrollTrigger.create({
-        trigger: el,
-        start: "top bottom",
-        end: "bottom top",
-        scrub: true,
-        onUpdate: (self) => {
-          progress.current = self.progress;
-        },
+      gsap.fromTo("[data-marrakech-photo]", { scale: 1.08, yPercent: 5 }, {
+        scale: 1,
+        yPercent: -3,
+        ease: "none",
+        scrollTrigger: { trigger: el, start: "top bottom", end: "bottom top", scrub: true },
       });
-
-      gsap.fromTo(
-        "[data-marrakech-copy]",
-        { y: 80, opacity: 0.15 },
-        {
-          y: 0,
-          opacity: 1,
-          ease: "none",
-          scrollTrigger: { trigger: el, start: "top 75%", end: "center 38%", scrub: true },
-        },
-      );
+      gsap.from("[data-marrakech-stat]", {
+        y: 24,
+        opacity: 0,
+        stagger: .09,
+        duration: .7,
+        ease: "power3.out",
+        scrollTrigger: { trigger: el, start: "top 58%", once: true },
+      });
     }, el);
 
     return () => ctx.revert();
   }, []);
 
   return (
-    <section ref={root} className="relative min-h-[115vh] overflow-hidden bg-[#100d0a]">
-      <div
-        className="absolute inset-0 bg-cover bg-center opacity-60"
-        style={{ backgroundImage: `url("${REAL_ASSETS.marrakechBackdrop}")` }}
-      />
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(16,13,10,.08),rgba(8,10,11,.38))]" />
-
-      <div className="absolute inset-0 lg:left-[24%]">
-        <SceneGate rootMargin="35% 0px"><MarrakechScene progress={progress} /></SceneGate>
+    <section ref={root} className="relative min-h-[110vh] overflow-hidden bg-[#080a09]">
+      <div className="absolute inset-y-0 right-0 w-full lg:w-[68%]">
+        <img
+          data-marrakech-photo
+          src="/api/media/villa"
+          alt="Architecture contemporaine à Marrakech"
+          className="h-full w-full object-cover object-center"
+        />
       </div>
+      <div className="absolute inset-0 bg-[linear-gradient(90deg,#080a09_0%,rgba(8,10,9,.98)_26%,rgba(8,10,9,.72)_48%,rgba(8,10,9,.15)_78%,rgba(8,10,9,.25)_100%)]" />
+      <div className="absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-[#050706] to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-[#050706] to-transparent" />
 
-      <div
-        className="pointer-events-none absolute inset-y-0 left-0 w-[48%] bg-cover bg-center opacity-[.075] mix-blend-soft-light"
-        style={{ backgroundImage: `url("${REAL_ASSETS.plasterTexture}")` }}
-      />
-
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,#100d0a_0%,rgba(16,13,10,.95)_20%,rgba(16,13,10,.68)_43%,rgba(16,13,10,.13)_72%,rgba(16,13,10,.24)_100%)]" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-72 bg-gradient-to-t from-[#060806] via-[#060806]/55 to-transparent" />
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-[#060806]/82 to-transparent" />
-
-      <div className="container-wp relative z-10 grid min-h-[115vh] items-center py-28 lg:grid-cols-[.82fr_1.18fr]">
-        <div data-marrakech-copy className="max-w-xl">
-          <span className="eyebrow !text-[#e0c3a1]">Marrakech / soleil / architecture</span>
+      <div className="container-wp relative z-10 flex min-h-[110vh] items-center py-28">
+        <div className="max-w-2xl">
+          <span className="eyebrow !text-white/44">Marrakech / architecture / énergie</span>
           <AnimatedHeading className="mt-6">
-            <h2 className="display-lg text-balance">Le solaire s&apos;intègre à l&apos;architecture.</h2>
+            <h2 className="display-lg">Le solaire doit respecter la maison.</h2>
           </AnimatedHeading>
-
-          <p className="mt-8 max-w-lg text-lg leading-relaxed text-white/58">
-            Une installation Watt Power n&apos;est pas pensée comme un équipement ajouté après coup. La production solaire s&apos;intègre au bâtiment, puis devient visible dans une seule interface.
+          <p className="mt-8 max-w-lg text-lg leading-relaxed text-white/55">
+            Notre approche part de l&apos;architecture : orientation, esthétique de toiture, usages du logement et niveau d&apos;autonomie recherché.
           </p>
 
-          <div className="mt-10 flex flex-wrap gap-x-9 gap-y-5 border-t border-white/[.1] pt-6">
-            <div>
-              <div className="text-[9px] uppercase tracking-[.15em] text-white/28">Contexte</div>
-              <div className="mt-1 text-sm text-white/70">Marrakech</div>
-            </div>
-            <div>
-              <div className="text-[9px] uppercase tracking-[.15em] text-white/28">3D</div>
-              <div className="mt-1 text-sm text-white/70">Modèles GLB réels</div>
-            </div>
-            <div>
-              <div className="text-[9px] uppercase tracking-[.15em] text-white/28">Environnement</div>
-              <div className="mt-1 text-sm text-white/70">Photo CC0 / Poly Haven</div>
-            </div>
+          <div className="mt-14 grid max-w-xl gap-px overflow-hidden rounded-[1.4rem] border border-white/10 bg-white/10 sm:grid-cols-3">
+            {[
+              ["01", "Étude", "Dimensionnement sur mesure"],
+              ["02", "Pose", "Intégration propre"],
+              ["03", "Suivi", "Pilotage intelligent"],
+            ].map(([n, title, copy]) => (
+              <div data-marrakech-stat key={n} className="bg-[#080a09]/92 p-5 backdrop-blur-xl">
+                <div className="text-[9px] text-[color:var(--accent)]">{n}</div>
+                <div className="mt-4 text-lg tracking-[-.03em]">{title}</div>
+                <div className="mt-2 text-xs leading-relaxed text-white/38">{copy}</div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
