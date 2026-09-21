@@ -113,8 +113,8 @@ function EnergyWorld({ progress }: { progress: MutableRefObject<number> }) {
         position={[6, 7, 5]}
         intensity={4.2}
         color="#fff0d0"
-        shadow-mapSize-width={2048}
-        shadow-mapSize-height={2048}
+        shadow-mapSize-width={1024}
+        shadow-mapSize-height={1024}
         shadow-camera-left={-8}
         shadow-camera-right={8}
         shadow-camera-top={8}
@@ -177,7 +177,7 @@ export function EnergySystemScene({ progress }: { progress: MutableRefObject<num
     <Canvas
       shadows
       camera={{ position: [6.6, 3.1, 8.2], fov: 39 }}
-      dpr={[1, 1.45]}
+      dpr={[1, 1.2]}
       gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }}
       onCreated={({ gl }) => {
         gl.toneMapping = THREE.ACESFilmicToneMapping;
