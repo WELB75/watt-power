@@ -4,6 +4,7 @@ import { useLoader } from "@react-three/fiber";
 import { useMemo } from "react";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import * as THREE from "three";
+import { REAL_ASSETS } from "@/components/three/realAssets";
 
 type RealModelProps = {
   url: string;
@@ -60,5 +61,7 @@ export function RealModel({
   );
 }
 
-useLoader.preload(GLTFLoader, "https://raw.githubusercontent.com/ALLTERCO/fleet-management/699a09dafce539777e69d1096f4c40ed8ee77a31/frontend/public/3d/fixtures/solar-panel.glb");
-useLoader.preload(GLTFLoader, "https://raw.githubusercontent.com/ALLTERCO/fleet-management/699a09dafce539777e69d1096f4c40ed8ee77a31/frontend/public/3d/fixtures/battery-wall.glb");
+useLoader.preload(GLTFLoader, REAL_ASSETS.solarPanel);
+useLoader.preload(GLTFLoader, REAL_ASSETS.battery);
+useLoader.preload(GLTFLoader, REAL_ASSETS.inverter);
+useLoader.preload(GLTFLoader, REAL_ASSETS.modernHouse);
