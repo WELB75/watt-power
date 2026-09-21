@@ -1,9 +1,9 @@
 const chart = "M5 126 C34 124 42 102 69 108 C96 113 104 80 132 87 C161 94 171 52 201 61 C229 69 239 31 270 40 C297 48 310 25 339 20";
 
 const flows = [
-  ["Solar", "4.8 kW", "bg-[color:var(--accent)]"],
-  ["Home", "2.1 kW", "bg-white/70"],
-  ["Battery", "78%", "bg-white/35"],
+  ["Solaire", "4.8 kW", "bg-[color:var(--accent)]"],
+  ["Maison", "2.1 kW", "bg-white/70"],
+  ["Batterie", "78%", "bg-white/35"],
 ];
 
 export function PhoneMockup() {
@@ -25,21 +25,21 @@ export function PhoneMockup() {
           <div className="flex items-center justify-between">
             <div>
               <div className="text-[9px] uppercase tracking-[.14em] text-white/28">Watt Power</div>
-              <div className="mt-1 text-sm tracking-[-.03em] text-white/80">My energy</div>
+              <div className="mt-1 text-sm tracking-[-.03em] text-white/80">Mon énergie</div>
             </div>
-            <div className="flex items-center gap-2 rounded-full border border-white/8 bg-white/[.025] px-3 py-2 text-[8px] uppercase tracking-[.12em] text-white/38"><span className="accent-dot !h-1 !w-1" /> Live</div>
+            <div className="flex items-center gap-2 rounded-full border border-white/8 bg-white/[.025] px-3 py-2 text-[8px] uppercase tracking-[.12em] text-white/38"><span className="accent-dot !h-1 !w-1" /> En direct</div>
           </div>
 
           <div className="mt-6 rounded-[1.55rem] border border-white/8 bg-white/[.025] p-4">
             <div className="flex items-end justify-between gap-4">
               <div>
-                <div className="text-[9px] text-white/32">Solar production</div>
+                <div className="text-[9px] text-white/32">Production solaire</div>
                 <div className="mt-1 text-[2.15rem] font-medium leading-none tracking-[-.06em]">4.8 <span className="text-sm text-white/32">kW</span></div>
               </div>
               <div className="rounded-full border border-[color:var(--accent)]/20 bg-[color:var(--accent)]/[.06] px-2 py-1 text-[8px] text-[color:var(--accent)]">+18%</div>
             </div>
 
-            <svg viewBox="0 0 345 145" className="mt-3 w-full" fill="none" aria-label="Demo solar production chart">
+            <svg viewBox="0 0 345 145" className="mt-3 w-full" fill="none" aria-label="Courbe de production solaire de démonstration">
               <defs><linearGradient id="area" x1="0" y1="0" x2="0" y2="1"><stop stopColor="var(--accent)" stopOpacity=".26"/><stop offset="1" stopColor="var(--accent)" stopOpacity="0"/></linearGradient></defs>
               <path d={`${chart} L339 145 L5 145 Z`} fill="url(#area)" />
               <path data-app-chart d={chart} pathLength="1" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" />
@@ -57,23 +57,23 @@ export function PhoneMockup() {
           </div>
 
           <div className="mt-3 rounded-2xl border border-white/7 bg-white/[.018] p-3">
-            <div className="flex items-center justify-between text-[8px] text-white/28"><span>Energy flow</span><span className="text-white/48">Now</span></div>
+            <div className="flex items-center justify-between text-[8px] text-white/28"><span>Flux d&apos;énergie</span><span className="text-white/48">Maintenant</span></div>
             <div className="mt-4 flex items-center justify-between gap-2 text-[8px] text-white/42">
-              <div className="text-center"><span className="mx-auto block h-6 w-6 rounded-full border border-[color:var(--accent)]/25 bg-[color:var(--accent)]/[.07]" /><span className="mt-1.5 block">Solar</span></div>
+              <div className="text-center"><span className="mx-auto block h-6 w-6 rounded-full border border-[color:var(--accent)]/25 bg-[color:var(--accent)]/[.07]" /><span className="mt-1.5 block">Solaire</span></div>
               <div className="relative h-px flex-1 overflow-hidden bg-white/10"><span data-flow-pulse className="absolute inset-y-0 left-0 w-1/3 bg-[color:var(--accent)]" /></div>
-              <div className="text-center"><span className="mx-auto block h-6 w-6 rounded-full border border-white/10 bg-white/[.03]" /><span className="mt-1.5 block">Home</span></div>
+              <div className="text-center"><span className="mx-auto block h-6 w-6 rounded-full border border-white/10 bg-white/[.03]" /><span className="mt-1.5 block">Maison</span></div>
               <div className="relative h-px flex-1 overflow-hidden bg-white/10"><span data-flow-pulse className="absolute inset-y-0 left-0 w-1/3 bg-white/50" /></div>
-              <div className="text-center"><span className="mx-auto block h-6 w-6 rounded-full border border-white/10 bg-white/[.03]" /><span className="mt-1.5 block">Battery</span></div>
+              <div className="text-center"><span className="mx-auto block h-6 w-6 rounded-full border border-white/10 bg-white/[.03]" /><span className="mt-1.5 block">Batterie</span></div>
             </div>
           </div>
 
           <div className="mt-4 flex justify-between rounded-full border border-white/8 bg-black/20 p-1 text-[7px] text-white/26">
-            {["Today", "Week", "Month", "Year"].map((x, i) => <span key={x} className={i === 0 ? "rounded-full bg-white/9 px-3 py-2 text-white/76" : "px-3 py-2"}>{x}</span>)}
+            {["Aujourd’hui", "Semaine", "Mois", "Année"].map((x, i) => <span key={x} className={i === 0 ? "rounded-full bg-white/9 px-3 py-2 text-white/76" : "px-3 py-2"}>{x}</span>)}
           </div>
 
-          <div className="mt-4 flex items-center justify-between text-[8px] text-white/28"><span>Estimated self-use</span><span className="text-white/75">82%</span></div>
+          <div className="mt-4 flex items-center justify-between text-[8px] text-white/28"><span>Autoconsommation estimée</span><span className="text-white/75">82%</span></div>
           <div className="mt-2 h-1 overflow-hidden rounded-full bg-white/7"><div data-app-bar className="h-full w-[82%] origin-left rounded-full bg-[color:var(--accent)]" /></div>
-          <div className="mt-4 text-center text-[7px] uppercase tracking-[.15em] text-white/16">Demo data</div>
+          <div className="mt-4 text-center text-[7px] uppercase tracking-[.15em] text-white/16">Données de démonstration</div>
         </div>
       </div>
     </div>
