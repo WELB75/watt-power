@@ -7,7 +7,7 @@ import { EnergySystemScene } from "@/components/three/EnergySystemScene";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const stages = ["Soleil", "Panneaux", "Onduleur", "Batterie", "Maison"];
+const stages = ["Panneaux", "Conversion", "Stockage", "Maison"];
 
 export function EnergySystem() {
   const root = useRef<HTMLElement>(null);
@@ -23,7 +23,7 @@ export function EnergySystem() {
       const trigger = ScrollTrigger.create({
         trigger: el,
         start: "top top",
-        end: "+=320%",
+        end: "+=330%",
         pin: sc,
         scrub: 1,
         anticipatePin: 1,
@@ -33,30 +33,20 @@ export function EnergySystem() {
       });
 
       gsap.to("[data-system-intro]", {
-        opacity: 0.18,
-        y: -24,
+        opacity: 0.12,
+        y: -36,
         ease: "none",
-        scrollTrigger: {
-          trigger: el,
-          start: "top top",
-          end: "35% top",
-          scrub: true,
-        },
+        scrollTrigger: { trigger: el, start: "top top", end: "32% top", scrub: true },
       });
 
       gsap.fromTo(
         "[data-system-result]",
-        { opacity: 0, y: 24 },
+        { opacity: 0, y: 26 },
         {
           opacity: 1,
           y: 0,
           ease: "none",
-          scrollTrigger: {
-            trigger: el,
-            start: "70% top",
-            end: "bottom bottom",
-            scrub: true,
-          },
+          scrollTrigger: { trigger: el, start: "66% top", end: "bottom bottom", scrub: true },
         },
       );
 
@@ -67,31 +57,36 @@ export function EnergySystem() {
   }, []);
 
   return (
-    <section id="system" ref={root} className="relative h-[420vh] border-t border-white/8 bg-[#080a0b]">
+    <section id="system" ref={root} className="relative h-[430vh] bg-[#060806]">
       <div ref={scene} className="relative flex h-[100svh] items-center overflow-hidden">
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 lg:left-[13%] lg:right-[4%]">
           <EnergySystemScene progress={progress} />
         </div>
 
-        <div className="energy-grid pointer-events-none absolute inset-0 opacity-15" />
-        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(8,10,11,.78),transparent_28%,transparent_72%,rgba(8,10,11,.72))]" />
+        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,#060806_0%,rgba(6,8,6,.92)_18%,rgba(6,8,6,.14)_42%,rgba(6,8,6,.05)_68%,rgba(6,8,6,.56)_100%)]" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-64 bg-gradient-to-t from-[#060806] to-transparent" />
 
         <div className="container-wp pointer-events-none relative z-10 flex h-full flex-col justify-between py-24">
-          <div data-system-intro className="max-w-3xl">
-            <span className="eyebrow">Le système énergétique</span>
-            <h2 className="mt-5 text-[clamp(2.8rem,7vw,7rem)] font-medium leading-[.9] tracking-[-.055em]">L&apos;énergie devient visible.</h2>
-            <p className="mt-6 max-w-md text-sm leading-relaxed text-white/42 md:text-base">Faites défiler : la caméra traverse le système Watt Power, de la production solaire jusqu&apos;à la maison.</p>
+          <div data-system-intro className="max-w-2xl pt-[3vh]">
+            <span className="eyebrow">Architecture du système</span>
+            <h2 className="mt-5 text-[clamp(3rem,7vw,7rem)] font-medium leading-[.88] tracking-[-.058em]">
+              Une maison.<br /><span className="text-white/28">Un seul écosystème.</span>
+            </h2>
+            <p className="mt-6 max-w-md text-sm leading-relaxed text-white/45 md:text-base">
+              Le scroll révèle la logique complète de l&apos;installation : captation, conversion, stockage puis alimentation du logement.
+            </p>
           </div>
 
           <div>
-            <p data-system-result className="mb-8 max-w-xl text-sm leading-relaxed text-white/54 opacity-0 md:text-base">
-              Production, conversion, stockage et consommation sont reliés par un même flux énergétique.
+            <p data-system-result className="mb-8 max-w-xl text-sm leading-relaxed text-white/57 opacity-0 md:text-base">
+              Chaque composant reste identifiable, mais l&apos;expérience est pensée comme un système unique et cohérent.
             </p>
-            <div className="grid grid-cols-5 border-t border-white/10 pt-4">
+
+            <div className="grid max-w-3xl grid-cols-4 gap-4 border-t border-white/[.09] pt-4">
               {stages.map((stage, index) => (
-                <div key={stage} className="min-w-0">
+                <div key={stage}>
                   <div className="text-[8px] tabular-nums text-white/20">0{index + 1}</div>
-                  <div className="mt-1 truncate text-[8px] uppercase tracking-[.11em] text-white/42 sm:text-[10px] md:text-[11px]">{stage}</div>
+                  <div className="mt-1 text-[8px] uppercase tracking-[.12em] text-white/45 sm:text-[10px]">{stage}</div>
                 </div>
               ))}
             </div>
