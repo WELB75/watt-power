@@ -34,10 +34,10 @@ export function Expansion() {
     <section ref={root} className="relative min-h-[100svh] overflow-hidden border-t border-white/8">
       <div className="container-wp relative flex min-h-[100svh] items-center py-28">
         <div className="relative z-10 max-w-4xl">
-          <span className="eyebrow">From Marrakech to what&apos;s next</span>
-          <h2 className="mt-6 text-[clamp(3rem,8vw,8.5rem)] font-medium leading-[.86] tracking-[-.06em]">Built locally.<br /><span className="text-white/32">Designed to scale.</span></h2>
+          <span className="eyebrow">De Marrakech vers la suite</span>
+          <h2 className="mt-6 text-[clamp(3rem,8vw,8.5rem)] font-medium leading-[.86] tracking-[-.06em]">Né localement.<br /><span className="text-white/32">Pensé pour grandir.</span></h2>
           <div className="mt-12 flex flex-wrap gap-8 text-[11px] uppercase tracking-[.16em] text-white/45 md:gap-16">
-            <span data-place>01 — Marrakech</span><span data-place>02 — Morocco</span><span data-place>03 — Africa</span>
+            <span data-place>01 — Marrakech</span><span data-place>02 — Maroc</span><span data-place>03 — Afrique</span>
           </div>
         </div>
         <div className="pointer-events-none absolute right-[-22vw] top-1/2 aspect-square w-[86vw] -translate-y-1/2 md:right-[-30vw]">
