@@ -12,6 +12,7 @@ export function Counter({ value, suffix = "", decimals = 0 }: { value: number; s
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+
     const obj = { value: 0 };
     const tween = gsap.to(obj, {
       value,
@@ -22,7 +23,10 @@ export function Counter({ value, suffix = "", decimals = 0 }: { value: number; s
         el.textContent = `${obj.value.toFixed(decimals)}${suffix}`;
       },
     });
-    return () => tween.kill();
+
+    return () => {
+      tween.kill();
+    };
   }, [value, suffix, decimals]);
 
   return <span ref={ref}>0{suffix}</span>;
