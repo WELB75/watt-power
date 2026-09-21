@@ -1,7 +1,7 @@
 "use client";
 
 import type { MutableRefObject } from "react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
@@ -23,9 +23,7 @@ function makeRoundedRectShape(width: number, height: number, radius: number) {
   return shape;
 }
 
-function useScreenTexture() {
-  const [texture, setTexture] = useState<THREE.CanvasTexture | null>(null);
-
+function useScreenTexture(materialRef: MutableRefObject<THREE.MeshBasicMaterial | null>) {
   useEffect(() => {
     const canvas = document.createElement("canvas");
     canvas.width = 780;
@@ -187,17 +185,20 @@ function useScreenTexture() {
     nextTexture.colorSpace = THREE.SRGBColorSpace;
     nextTexture.anisotropy = 4;
     nextTexture.needsUpdate = true;
-    setTexture(nextTexture);
+    if (materialRef.current) {
+      materialRef.current.map = nextTexture;
+      materialRef.current.color.set("#ffffff");
+      materialRef.current.needsUpdate = true;
+    }
 
     return () => nextTexture.dispose();
-  }, []);
-
-  return texture;
+  }, [materialRef]);
 }
 
 function PhoneModel({ progress }: { progress: MutableRefObject<number> }) {
   const phone = useRef<THREE.Group>(null);
-  const texture = useScreenTexture();
+  const screenMaterial = useRef<THREE.MeshBasicMaterial>(null);
+  useScreenTexture(screenMaterial);
 
   const bodyGeometry = useMemo(() => {
     const shape = makeRoundedRectShape(3.12, 6.35, 0.46);
@@ -252,7 +253,7 @@ function PhoneModel({ progress }: { progress: MutableRefObject<number> }) {
 
       <mesh position={[0, 0, 0.255]}>
         <planeGeometry args={[2.82, 6.0]} />
-        <meshBasicMaterial map={texture ?? undefined} color={texture ? "#ffffff" : "#090d0c"} toneMapped={false} />
+        <meshBasicMaterial ref={screenMaterial} color="#090d0c" toneMapped={false} />
       </mesh>
 
       <mesh position={[0, 2.78, 0.278]}>
