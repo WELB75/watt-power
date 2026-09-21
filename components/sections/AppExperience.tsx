@@ -63,30 +63,30 @@ export function AppExperience() {
 
         <div className="container-wp relative grid w-full items-center gap-10 lg:grid-cols-[.76fr_1fr_.76fr]">
           <div data-app-copy className="relative z-10 self-center">
-            <span className="eyebrow">Watt Power app</span>
-            <h2 className="mt-5 text-[clamp(3rem,6.7vw,6.8rem)] font-medium leading-[.87] tracking-[-.058em]">Your energy.<br /><span className="text-white/28">In your hand.</span></h2>
-            <p className="mt-6 max-w-sm text-sm leading-relaxed text-white/43 md:text-base">Production. Consumption. History. Battery. Savings estimates. System status. One interface.</p>
-            <div className="mt-8 flex items-center gap-3 text-[9px] uppercase tracking-[.15em] text-white/26"><span className="accent-dot !h-1 !w-1" /> Real-time monitoring concept</div>
+            <span className="eyebrow">Application Watt Power</span>
+            <h2 className="mt-5 text-[clamp(3rem,6.7vw,6.8rem)] font-medium leading-[.87] tracking-[-.058em]">Votre énergie.<br /><span className="text-white/28">Dans votre main.</span></h2>
+            <p className="mt-6 max-w-sm text-sm leading-relaxed text-white/43 md:text-base">Production. Consommation. Historique. Batterie. Économies estimées. État du système. Une seule interface.</p>
+            <div className="mt-8 flex items-center gap-3 text-[9px] uppercase tracking-[.15em] text-white/26"><span className="accent-dot !h-1 !w-1" /> Concept de suivi en temps réel</div>
           </div>
 
           <div className="relative min-h-[620px] lg:min-h-[720px]">
             <div data-phone className="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 [transform-style:preserve-3d] [perspective:1300px]"><PhoneMockup /></div>
 
             <div data-floating-left className="absolute left-[-3%] top-[22%] z-30 hidden rounded-2xl border border-white/10 bg-black/38 px-4 py-3 backdrop-blur-xl md:block lg:left-[-14%]">
-              <div className="text-[8px] uppercase tracking-[.14em] text-white/24">Live production</div>
+              <div className="text-[8px] uppercase tracking-[.14em] text-white/24">Production instantanée</div>
               <div className="mt-1 text-2xl tracking-[-.05em]">4.8 <span className="text-xs text-white/28">kW</span></div>
               <div className="mt-2 h-px w-24 bg-gradient-to-r from-[color:var(--accent)] to-transparent" />
             </div>
 
             <div data-floating-right className="absolute bottom-[23%] right-[-3%] z-30 hidden rounded-2xl border border-white/10 bg-black/38 px-4 py-3 backdrop-blur-xl md:block lg:right-[-13%]">
-              <div className="text-[8px] uppercase tracking-[.14em] text-white/24">Battery</div>
-              <div className="mt-1 flex items-end gap-2"><span className="text-2xl tracking-[-.05em]">78%</span><span className="mb-1 text-[8px] uppercase tracking-[.12em] text-[color:var(--accent)]">Charging</span></div>
+              <div className="text-[8px] uppercase tracking-[.14em] text-white/24">Batterie</div>
+              <div className="mt-1 flex items-end gap-2"><span className="text-2xl tracking-[-.05em]">78%</span><span className="mb-1 text-[8px] uppercase tracking-[.12em] text-[color:var(--accent)]">En charge</span></div>
             </div>
           </div>
 
           <div data-app-end className="relative z-10 self-end pb-14 text-right opacity-0 lg:self-center lg:pb-0">
-            <span className="text-[9px] uppercase tracking-[.15em] text-white/28">Live visibility</span>
-            <p className="mt-3 ml-auto max-w-xs text-xl leading-tight tracking-[-.035em] text-white/84">See what your system is doing — now, today, this month, this year.</p>
+            <span className="text-[9px] uppercase tracking-[.15em] text-white/28">Visibilité en temps réel</span>
+            <p className="mt-3 ml-auto max-w-xs text-xl leading-tight tracking-[-.035em] text-white/84">Voyez ce que fait votre système — maintenant, aujourd&apos;hui, ce mois-ci, cette année.</p>
             <div className="mt-6 ml-auto h-px w-24 bg-gradient-to-l from-[color:var(--accent)] to-transparent" />
           </div>
         </div>
