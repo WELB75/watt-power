@@ -43,8 +43,8 @@ function MarrakechWorld({ progress }: { progress: MutableRefObject<number> }) {
         position={[7.5, 7.5, 4.5]}
         intensity={4.5}
         color="#ffd2a2"
-        shadow-mapSize-width={2048}
-        shadow-mapSize-height={2048}
+        shadow-mapSize-width={1024}
+        shadow-mapSize-height={1024}
         shadow-camera-left={-8}
         shadow-camera-right={8}
         shadow-camera-top={8}
@@ -88,7 +88,7 @@ export function MarrakechScene({ progress }: { progress: MutableRefObject<number
     <Canvas
       shadows
       camera={{ position: [6.8, 3.45, 8.8], fov: 38 }}
-      dpr={[1, 1.4]}
+      dpr={[1, 1.2]}
       gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }}
       onCreated={({ gl }) => {
         gl.toneMapping = THREE.ACESFilmicToneMapping;
