@@ -306,7 +306,7 @@ export function PhoneScene({ progress }: { progress: MutableRefObject<number> })
     <Canvas
       shadows
       camera={{ position: [0, 0.1, 9.7], fov: 34 }}
-      dpr={[1, 1.5]}
+      dpr={[1, 1.2]}
       gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }}
       onCreated={({ gl }) => {
         gl.toneMapping = THREE.ACESFilmicToneMapping;
