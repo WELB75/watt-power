@@ -1,6 +1,6 @@
 export const dynamic = "force-dynamic";
 
-export function GET() {
+export function GET(request: Request) {
   const chunks = [
     process.env.VILLA_B64_01,
     process.env.VILLA_B64_02,
@@ -11,7 +11,7 @@ export function GET() {
   ];
 
   if (chunks.some((chunk) => !chunk)) {
-    return new Response("Villa asset unavailable", { status: 404 });
+    return Response.redirect(new URL("/assets/images/villa-aerial-v2.webp", request.url), 307);
   }
 
   const bytes = Buffer.from(chunks.join(""), "base64");

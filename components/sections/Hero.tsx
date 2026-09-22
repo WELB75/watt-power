@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -14,7 +15,15 @@ const layers = [
   ["05", "Cadre aluminium"],
 ];
 
-const roofPanels = Array.from({ length: 8 });
+// Roof coordinates are in the image's 1536 × 1024 plane, so they stay
+// registered to the architecture when the viewport crops the composition.
+const roofPanels = Array.from({ length: 8 }, (_, index) => {
+  const col = index % 4;
+  const row = Math.floor(index / 4);
+  const point = (u: number, v: number) => `${934 + 284 * u + 174 * v},${326 + 14 * u - 32 * v}`;
+  const u = col / 4, v = row / 2;
+  return [point(u, v), point(u + .23, v), point(u + .23, v + .43), point(u, v + .43)].join(" ");
+});
 
 export function Hero() {
   const root = useRef<HTMLElement>(null);
@@ -23,12 +32,9 @@ export function Hero() {
     const el = root.current;
     if (!el) return;
 
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const ctx = gsap.context(() => {
-      if (reduced) {
-        gsap.set("[data-panel-layer],[data-roof-panel],[data-final-copy]", { opacity: 1 });
-        return;
-      }
+    const media = gsap.matchMedia();
+    media.add("(prefers-reduced-motion: no-preference)", () => {
+      const ctx = gsap.context(() => {
 
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -36,13 +42,12 @@ export function Hero() {
           start: "top top",
           end: "bottom bottom",
           scrub: 1,
+          invalidateOnRefresh: true,
         },
       });
 
-      tl.from("[data-hero-title]", { yPercent: 115, duration: 0.07, stagger: 0.015 }, 0.015)
-        .from("[data-hero-copy]", { opacity: 0, y: 20, duration: 0.06 }, 0.08)
-        .to("[data-hero-intro]", { opacity: 0.12, y: -36, duration: 0.08 }, 0.18)
-        .fromTo("[data-anatomy]", { opacity: 0, x: 32 }, { opacity: 1, x: 0, duration: 0.08 }, 0.18)
+      tl.to("[data-hero-intro]", { autoAlpha: 0, y: -36, duration: 0.08 }, 0.18)
+        .fromTo("[data-anatomy]", { autoAlpha: 0, x: 32 }, { autoAlpha: 1, x: 0, duration: 0.08 }, 0.18)
         .to("[data-layer-glass]", { y: -135, z: 120, duration: 0.12 }, 0.2)
         .to("[data-layer-eva-front]", { y: -78, z: 72, duration: 0.12 }, 0.205)
         .to("[data-layer-cells]", { y: -18, z: 18, duration: 0.12 }, 0.21)
@@ -50,15 +55,23 @@ export function Hero() {
         .to("[data-layer-backsheet]", { y: 108, z: -95, duration: 0.12 }, 0.22)
         .to("[data-layer-junction]", { y: 158, z: -130, duration: 0.12 }, 0.225)
         .from("[data-layer-label]", { opacity: 0, x: 16, stagger: 0.012, duration: 0.06 }, 0.24)
-        .to("[data-anatomy]", { opacity: 0, x: -18, duration: 0.06 }, 0.44)
+        .to("[data-anatomy]", { autoAlpha: 0, x: -18, duration: 0.06 }, 0.44)
         .to("[data-panel-layer]", { y: 0, z: 0, duration: 0.1, stagger: 0.006 }, 0.44)
-        .fromTo("[data-install-copy]", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.08 }, 0.56)
+        .fromTo("[data-install-copy]", { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.08 }, 0.56)
         .to("[data-panel-stage]", {
-          xPercent: 47,
-          yPercent: -40,
-          scale: 0.35,
-          rotateZ: -4,
-          rotateX: 66,
+          x: () => {
+            const plane = el.querySelector(".villa-plane")!.getBoundingClientRect();
+            const host = el.querySelector(".panel-host")!.getBoundingClientRect();
+            return plane.left + plane.width * 1004 / 1536 - (host.left + host.width / 2);
+          },
+          y: () => {
+            const plane = el.querySelector(".villa-plane")!.getBoundingClientRect();
+            const host = el.querySelector(".panel-host")!.getBoundingClientRect();
+            return plane.top + plane.height * 321 / 1024 - (host.top + host.height / 2);
+          },
+          scale: 0.2,
+          rotateZ: 3,
+          rotateX: 76,
           duration: 0.16,
           ease: "power2.inOut",
         }, 0.56)
@@ -70,10 +83,10 @@ export function Hero() {
           panel,
           {
             opacity: 0,
-            y: -150 - index * 14,
-            x: (index % 2 === 0 ? -1 : 1) * (85 + index * 8),
-            scale: 1.7,
-            rotate: index % 2 === 0 ? -8 : 8,
+            y: -(index % 4) * 3.5 + Math.floor(index / 4) * 16,
+            x: -(index % 4) * 71 - Math.floor(index / 4) * 87,
+            scale: 1,
+            rotate: 0,
           },
           {
             opacity: 1,
@@ -88,36 +101,46 @@ export function Hero() {
         );
       });
 
-      tl.to("[data-install-copy]", { opacity: 0.08, duration: 0.05 }, 0.86)
-        .fromTo("[data-final-copy]", { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.08 }, 0.88)
-        .to("[data-villa-image]", { scale: 1.035, duration: 1, ease: "none" }, 0);
-    }, el);
-
-    return () => ctx.revert();
+      tl.to("[data-install-copy]", { autoAlpha: 0, duration: 0.05 }, 0.86)
+        .fromTo("[data-final-copy]", { autoAlpha: 0, y: 26 }, { autoAlpha: 1, y: 0, duration: 0.08 }, 0.88)
+        .to("[data-villa-plane]", { scale: 1.035, duration: 1, ease: "none" }, 0);
+      }, el);
+      return () => ctx.revert();
+    });
+    return () => media.revert();
   }, []);
 
   return (
-    <section id="top" ref={root} className="relative h-[520vh] bg-[#050706]">
+    <section id="top" ref={root} className="solar-story relative h-[420svh] bg-[#050706]">
       <div className="sticky top-0 h-[100svh] overflow-hidden">
-        <img
-          data-villa-image
-          src="/api/media/villa"
-          alt="Villa contemporaine à Marrakech avec piscine"
-          className="absolute inset-0 h-full w-full object-cover object-center"
-        />
+        <div className="villa-plane" aria-hidden="true">
+          <div data-villa-plane className="relative h-full w-full">
+          <Image src="/assets/images/villa-aerial-v2.webp" alt="" fill sizes="(max-width: 700px) 150vw, 100vw" preload className="object-cover" />
+          <svg viewBox="0 0 1536 1024" className="absolute inset-0 h-full w-full overflow-visible">
+            <defs>
+              <pattern id="roof-cells" width="12" height="8" patternUnits="userSpaceOnUse" patternTransform="matrix(1 .05 -.8 .35 0 0)">
+                <rect width="12" height="8" fill="#17282e" />
+                <path d="M0 0H12M0 0V8" stroke="#819296" strokeWidth=".65" />
+              </pattern>
+            </defs>
+            <g data-roof-array className="installed-array">
+              {roofPanels.map((points, index) => <polygon data-roof-panel key={index} points={points} fill="url(#roof-cells)" stroke="#91928b" strokeWidth="2" />)}
+            </g>
+          </svg>
+          </div>
+        </div>
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,7,6,.94)_0%,rgba(5,7,6,.82)_25%,rgba(5,7,6,.26)_54%,rgba(5,7,6,.09)_75%,rgba(5,7,6,.24)_100%)]" />
         <div className="absolute inset-x-0 bottom-0 h-[42vh] bg-gradient-to-t from-[#050706] via-[#050706]/35 to-transparent" />
         <div className="absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-[#050706]/65 to-transparent" />
 
         <div className="container-wp relative z-10 h-full pt-24">
-          <div className="absolute left-[var(--space-page)] right-[var(--space-page)] top-6 flex items-center justify-between text-[10px] uppercase tracking-[.18em] text-white/52">
+          <div className="absolute left-[var(--space-page)] right-[var(--space-page)] top-24 flex items-center justify-between text-[10px] uppercase tracking-[.18em] text-white/52">
             <div className="flex items-center gap-3"><span className="accent-dot" /> Marrakech · Solaire premium</div>
             <span className="hidden md:block">Conception · Installation · Pilotage</span>
           </div>
 
-          <div data-hero-intro className="absolute left-[var(--space-page)] top-[20%] max-w-[780px]">
-            <div className="overflow-hidden"><h1 data-hero-title className="display-xl">L&apos;ÉNERGIE</h1></div>
-            <div className="overflow-hidden"><h1 data-hero-title className="display-xl text-white/30">SOLAIRE.</h1></div>
+          <div data-hero-intro className="absolute left-[var(--space-page)] hero-intro top-[23%] max-w-[780px]">
+            <h1 className="hero-title">L&apos;énergie solaire.<br /><span>À votre mesure.</span></h1>
             <div data-hero-copy className="mt-7 max-w-xl">
               <p className="text-xl leading-tight tracking-[-.03em] text-white/84 md:text-2xl">Pensée comme une architecture.</p>
               <p className="mt-3 max-w-lg text-sm leading-relaxed text-white/52 md:text-base">
@@ -130,7 +153,7 @@ export function Hero() {
             </div>
           </div>
 
-          <div className="absolute right-[5vw] top-[21%] z-20 h-[48vh] w-[min(36vw,590px)] [perspective:1300px]">
+          <div className="panel-host absolute right-[7vw] top-[38%] z-20 h-[38vh] w-[min(40vw,590px)] [perspective:1300px]">
             <div
               data-panel-stage
               className="relative h-full w-full origin-center [transform-style:preserve-3d] [transform:rotateX(58deg)_rotateZ(-8deg)_rotateY(2deg)]"
@@ -145,9 +168,9 @@ export function Hero() {
             </div>
           </div>
 
-          <div data-anatomy className="absolute right-[var(--space-page)] top-[16%] hidden w-[285px] opacity-0 xl:block">
+          <div data-anatomy className="anatomy-copy absolute left-[var(--space-page)] top-[24%] w-[285px] opacity-0">
             <span className="eyebrow !text-white/45">Technologie / panneau premium</span>
-            <h2 className="mt-4 text-4xl font-medium leading-[.95] tracking-[-.05em]">Chaque couche a un rôle.</h2>
+            <h2 className="mt-4 text-4xl font-medium leading-[.95] tracking-[-.05em]">La précision, à chaque couche.</h2>
             <div className="mt-7 border-t border-white/10">
               {layers.map(([number, label]) => (
                 <div data-layer-label key={number} className="flex items-center gap-4 border-b border-white/[.08] py-3">
@@ -161,25 +184,14 @@ export function Hero() {
           <div data-install-copy className="absolute left-[var(--space-page)] top-[19%] max-w-[470px] opacity-0">
             <span className="eyebrow !text-white/48">De l&apos;usine à votre toit</span>
             <h2 className="mt-4 text-[clamp(3rem,6vw,6.4rem)] font-medium leading-[.88] tracking-[-.06em]">
-              Une pose.<br /><span className="text-white/32">Parfaite.</span>
+              Votre toit.<br /><span className="text-white/60">Une ressource.</span>
             </h2>
             <p className="mt-6 max-w-sm text-sm leading-relaxed text-white/54 md:text-base">
-              Le panneau se recompose, se duplique puis vient s&apos;aligner sur la toiture en respectant l&apos;architecture de la villa.
+              Une installation dimensionnée pour vos usages, intégrée avec soin à l&apos;architecture de votre villa.
             </p>
           </div>
 
-          <div
-            data-roof-array
-            className="roof-array absolute right-[10.5%] top-[13.8%] z-10 grid w-[47%] grid-cols-4 gap-[0.55vw] opacity-0 [transform:perspective(1100px)_rotateX(64deg)_rotateZ(-3.5deg)_skewX(-2deg)]"
-          >
-            {roofPanels.map((_, index) => (
-              <div data-roof-panel key={index} className="roof-panel">
-                <div className="roof-panel-cells" />
-              </div>
-            ))}
-          </div>
-
-          <div data-final-copy className="absolute bottom-[12%] right-[var(--space-page)] max-w-[420px] text-right opacity-0">
+          <div data-final-copy className="absolute bottom-[16%] left-[var(--space-page)] max-w-[420px] opacity-0">
             <span className="text-[9px] uppercase tracking-[.15em] text-[color:var(--accent)]">Installation terminée</span>
             <p className="mt-3 text-3xl font-medium leading-[.96] tracking-[-.05em] text-white md:text-5xl">
               Le solaire devient une partie de la maison.

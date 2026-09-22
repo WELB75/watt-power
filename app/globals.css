@@ -40,9 +40,8 @@ canvas {
   display: block;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+@layer base {
+  a { color: inherit; text-decoration: none; }
 }
 
 button,
@@ -302,20 +301,33 @@ a {
     100% 100%;
 }
 
-@media (max-width: 900px) {
-  [data-panel-stage] {
-    transform: rotateX(58deg) rotateZ(-7deg) scale(.86) !important;
-  }
 
-  .solar-layer,
-  .solar-frame,
-  .solar-junction {
-    width: 82%;
-  }
-
-  .roof-array {
-    right: 4% !important;
-    top: 18% !important;
-    width: 58% !important;
-  }
+/* Image and roof share one coordinate plane; never position the roof in viewport percentages. */
+.villa-plane { position:absolute; width:max(100vw,150svh); aspect-ratio:3/2; left:50%; top:50%; transform:translate(-50%,-50%); }
+.hero-title { font-size:clamp(3.4rem,6.8vw,7rem); line-height:.98; letter-spacing:-.065em; font-weight:500; }
+.hero-title span { color:rgba(255,255,255,.6); }
+.installed-array { opacity:0; }
+.solar-layer,.solar-frame { border-radius:3px; aspect-ratio:1.8; }
+.solar-cells { background-color:#10222d; }
+.solar-glass { backdrop-filter:none; opacity:.5; }
+.solar-eva { backdrop-filter:none; opacity:.45; }
+.solar-junction { width:17%; }
+[data-anatomy],[data-install-copy],[data-final-copy] { visibility:hidden; }
+[data-roof-panel] { filter:drop-shadow(2px 5px 2px #0006); }
+a:focus-visible,button:focus-visible { outline:2px solid var(--accent); outline-offset:5px; }
+@media(max-width:700px) {
+  .villa-plane { width:150vw; left:35%; top:auto; bottom:4%; transform:translateX(-50%); mask-image:linear-gradient(transparent,black 12%,black 85%,transparent); }
+  .hero-intro { top:18%; right:var(--space-page); }
+  .hero-title { font-size:clamp(2.8rem,10vw,4rem); }
+  .panel-host { top:59%; right:8%; width:80vw; height:28svh; }
+  .anatomy-copy { top:17%; width:80%; }
+  .anatomy-copy h2 { font-size:2.1rem; }
+  [data-layer-label] { padding-block:7px; }
+  [data-install-copy] { top:20%; right:var(--space-page); }
+  [data-final-copy] { top:20%; bottom:auto; right:var(--space-page); }
+}
+@media(prefers-reduced-motion:reduce) {
+  .solar-story { height:100svh; min-height:700px; }
+  .installed-array { opacity:1; }
+  .panel-host,[data-anatomy],[data-install-copy],[data-final-copy] { display:none; }
 }

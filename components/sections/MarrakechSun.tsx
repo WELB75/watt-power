@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -37,10 +38,10 @@ export function MarrakechSun() {
   return (
     <section ref={root} className="relative min-h-[110vh] overflow-hidden bg-[#080a09]">
       <div className="absolute inset-y-0 right-0 w-full lg:w-[68%]">
-        <img
+        <Image fill sizes="(min-width: 1024px) 68vw, 100vw"
           data-marrakech-photo
-          src="/api/media/villa"
-          alt="Architecture contemporaine à Marrakech"
+          src="/assets/images/villa-aerial-v2.webp"
+          alt="Illustration architecturale d’une villa contemporaine au pied de l’Atlas"
           className="h-full w-full object-cover object-center"
         />
       </div>

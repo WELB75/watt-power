@@ -1,4 +1,9 @@
-export function FinalCTA() {
+import { connection } from "next/server";
+
+export async function FinalCTA() {
+  await connection();
+  const email = process.env.CONTACT_EMAIL?.trim();
+  const contactReady = Boolean(email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && !email.endsWith(".example"));
   return (
     <section id="contact" className="relative min-h-[100svh] border-t border-white/[.08] bg-[#050706]">
       <div className="container-wp flex min-h-[100svh] flex-col justify-between py-10 md:py-14">
@@ -14,20 +19,22 @@ export function FinalCTA() {
           <p className="mt-8 max-w-xl text-base leading-relaxed text-white/44">
             Villa, hôtel, commerce ou entreprise : nous concevons une installation solaire adaptée à votre architecture et à vos usages.
           </p>
-          <div className="mt-10 flex flex-wrap gap-3">
+          {contactReady ? <div className="mt-10 flex flex-wrap gap-3">
             <a
-              href="mailto:hello@wattpower.example?subject=Etude%20solaire"
+              href={`mailto:${email}?subject=Etude%20solaire`}
               className="rounded-full bg-[color:var(--accent)] px-6 py-4 text-[11px] font-medium uppercase tracking-[.14em] text-black transition hover:scale-[1.02]"
             >
               Demander une étude solaire
             </a>
             <a
-              href="mailto:hello@wattpower.example"
+              href={`mailto:${email}`}
               className="rounded-full border border-white/15 px-6 py-4 text-[11px] uppercase tracking-[.14em] text-white/65 transition hover:border-white/35 hover:text-white"
             >
               Parler à un expert
             </a>
-          </div>
+          </div> : <p className="mt-10 max-w-lg border-l-2 border-[color:var(--accent)] pl-5 text-sm leading-relaxed text-white/65">
+            Les demandes d’étude en ligne ouvriront prochainement.
+          </p>}
         </div>
 
         <footer className="flex flex-col gap-4 border-t border-white/10 pt-5 text-[10px] uppercase tracking-[.13em] text-white/26 md:flex-row md:items-center md:justify-between">
